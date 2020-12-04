@@ -1,16 +1,87 @@
 /******/ (() => { // webpackBootstrap
+/******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
+
+/***/ "./main/index.ts":
+/*!***********************!*\
+  !*** ./main/index.ts ***!
+  \***********************/
+/*! namespace exports */
+/*! exports [not provided] [no usage info] */
+/*! runtime requirements: __webpack_require__, __webpack_require__.n, __webpack_require__.r, __webpack_exports__, __webpack_require__.* */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var electron__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! electron */ "electron");
+/* harmony import */ var electron__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(electron__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _ipcCmmut__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ipcCmmut */ "./main/ipcCmmut.ts");
+
+
+var app = (electron__WEBPACK_IMPORTED_MODULE_0___default().app);
+var BrowserWindow = (electron__WEBPACK_IMPORTED_MODULE_0___default().BrowserWindow);
+var mainWindow;
+var debug = true;
+(0,_ipcCmmut__WEBPACK_IMPORTED_MODULE_1__.initIpcEvent)();
+app.on("ready", function () {
+  mainWindow = new BrowserWindow({
+    width: 600 + (debug ? 200 : 0),
+    height: 400,
+    webPreferences: {
+      nodeIntegration: true,
+      contextIsolation: false
+    }
+  });
+  mainWindow.loadURL("file://".concat(__dirname, "/index.html"));
+  if (debug) mainWindow.webContents.openDevTools();
+  mainWindow.on("closed", function () {
+    mainWindow = null;
+  });
+});
+
+/***/ }),
+
+/***/ "./main/ipcCmmut.ts":
+/*!**************************!*\
+  !*** ./main/ipcCmmut.ts ***!
+  \**************************/
+/*! namespace exports */
+/*! export initIpcEvent [provided] [no usage info] [missing usage info prevents renaming] */
+/*! other exports [not provided] [no usage info] */
+/*! runtime requirements: __webpack_require__, __webpack_require__.n, __webpack_require__.r, __webpack_exports__, __webpack_require__.d, __webpack_require__.* */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "initIpcEvent": () => /* binding */ initIpcEvent
+/* harmony export */ });
+/* harmony import */ var electron__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! electron */ "electron");
+/* harmony import */ var electron__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(electron__WEBPACK_IMPORTED_MODULE_0__);
+
+
+
+var app = (electron__WEBPACK_IMPORTED_MODULE_0___default().app); //const DataStore = require("nedb");
+
+var initIpcEvent = function initIpcEvent() {
+  electron__WEBPACK_IMPORTED_MODULE_0__.ipcMain.handle("getDirectoryPath", function (event) {
+    var folder = electron__WEBPACK_IMPORTED_MODULE_0__.dialog.showOpenDialog({
+      properties: ["openDirectory"]
+    });
+    return folder;
+  });
+};
+
+/***/ }),
 
 /***/ "electron":
 /*!***************************!*\
   !*** external "electron" ***!
   \***************************/
 /*! dynamic exports */
-/*! exports [maybe provided (runtime-defined)] [no usage info] */
+/*! export __esModule [maybe provided (runtime-defined)] [no usage info] [provision prevents renaming (no use info)] */
+/*! other exports [maybe provided (runtime-defined)] [no usage info] */
 /*! runtime requirements: module */
 /***/ ((module) => {
 
-"use strict";
 module.exports = require("electron");;
 
 /***/ })
@@ -41,40 +112,51 @@ module.exports = require("electron");;
 /******/ 	}
 /******/ 	
 /************************************************************************/
-(() => {
-/*!***********************!*\
-  !*** ./main/index.ts ***!
-  \***********************/
-/*! unknown exports (runtime-defined) */
-/*! runtime requirements: __webpack_require__ */
-var electron = __webpack_require__(/*! electron */ "electron");
-
-var _require = __webpack_require__(/*! electron */ "electron"),
-    ipcMain = _require.ipcMain;
-
-var _require2 = __webpack_require__(/*! electron */ "electron"),
-    dialog = _require2.dialog;
-
-var app = electron.app;
-var BrowserWindow = electron.BrowserWindow;
-var mainWindow;
-app.on("ready", function () {
-  mainWindow = new BrowserWindow({
-    width: 900,
-    height: 600,
-    webPreferences: {
-      nodeIntegration: true,
-      contextIsolation: false
-    }
-  });
-  mainWindow.loadURL("file://".concat(__dirname, "/index.html"));
-  mainWindow.webContents.openDevTools();
-  mainWindow.on("closed", function () {
-    mainWindow = null;
-  });
-});
-})();
-
+/******/ 	/* webpack/runtime/compat get default export */
+/******/ 	(() => {
+/******/ 		// getDefaultExport function for compatibility with non-harmony modules
+/******/ 		__webpack_require__.n = (module) => {
+/******/ 			var getter = module && module.__esModule ?
+/******/ 				() => module['default'] :
+/******/ 				() => module;
+/******/ 			__webpack_require__.d(getter, { a: getter });
+/******/ 			return getter;
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/define property getters */
+/******/ 	(() => {
+/******/ 		// define getter functions for harmony exports
+/******/ 		__webpack_require__.d = (exports, definition) => {
+/******/ 			for(var key in definition) {
+/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
+/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+/******/ 				}
+/******/ 			}
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
+/******/ 	(() => {
+/******/ 		__webpack_require__.o = (obj, prop) => Object.prototype.hasOwnProperty.call(obj, prop)
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/make namespace object */
+/******/ 	(() => {
+/******/ 		// define __esModule on exports
+/******/ 		__webpack_require__.r = (exports) => {
+/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 			}
+/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/************************************************************************/
+/******/ 	// startup
+/******/ 	// Load entry module
+/******/ 	__webpack_require__("./main/index.ts");
+/******/ 	// This entry module used 'exports' so it can't be inlined
 /******/ })()
 ;
 //# sourceMappingURL=index.js.map

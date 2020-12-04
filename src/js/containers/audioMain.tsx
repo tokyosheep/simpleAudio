@@ -1,26 +1,26 @@
 import * as React from "react";
-import styled, { css,ThemeContext } from 'styled-components'
+import styled, { css } from 'styled-components';
 
-const AudioMain = () =>{
+import MenuCompo from "../components/menu/menuCompo";
+import VolumeCompo from "../components/volume/volumeCompo";
+import ControlCompo from "../components/control/controlCompo";
+import SongDisplayCompo from "../components/songDisplay/songDisplayCompo";
+import LabelCompo from "../components/label/labelCompo";
+import MusicList from "../components/musicList/musicList";
+
+import {styleComponent} from "../styles/containerStyle";
+const Container = styleComponent.container;
+
+const AudioContainer = () =>{
     return(
         <Container>
-            <Button name="function" onClick={(e)=>console.log(e.target)}>Normal Button</Button>
+            <LabelCompo />
+            <SongDisplayCompo />
+            <ControlCompo />
+            <VolumeCompo />
+            <MusicList />
         </Container>
     )
 }
 
-const Button = styled.button`
-    background: transparent;
-    border-radius: 3px;
-    border: 2px solid palevioletred;
-    color: palevioletred;
-    margin: 0 1em;
-    padding: 0.25em 1em;
-`;
-
-
-const Container = styled.div`
-    text-align: center;
-`;
-
-export default AudioMain;
+export default AudioContainer;
