@@ -2,6 +2,7 @@ import * as React from "react";
 import AudioContainer from "./audioMain";
 
 import { createGlobalStyle } from "styled-components";
+import Setting from "../components/setting/setting";
 
 const GlobalStyle = createGlobalStyle`
     body{
@@ -17,12 +18,19 @@ const GlobalStyle = createGlobalStyle`
         font-weight: normal;
         font-style: normal;
     }
+    @font-face {
+        font-family: "Scoreboard";
+        src: url("./digitalFont/CrashedScoreboard.ttf") format("truetype");
+        font-weight: normal;
+        font-style: normal;
+    }
 `;
 
 const Layout = () =>{
     return(
         <>
             <GlobalStyle  />
+            <Setting />
             <AudioContainer />
         </>
     )

@@ -2,6 +2,9 @@ import * as React from "react";
 import styled from "styled-components";
 import {mainBlue,shine} from "../../styles/commonColor"; 
 
+import {setMinuteTime} from "../../fileSystem/timeConvert";
+
+
 export const ProgressBar = styled.input`
     appearance: none;
     border: none;
@@ -44,17 +47,16 @@ const TimeWrapper = styled.div`
     box-sizing:border-box;
 `;
 
-const OptionsWrapper = styled.div`
-    display: flex;
-    justify-content:flex-start;
-`;
-
-export const MusicLength = () => (
-    <BarWrapper>
-        <TimeWrapper>
-            <RangeValue>0</RangeValue>
-            <ProgressBar min={0} max={100} type="range" value={10}></ProgressBar>
-            <RangeValue>100</RangeValue>
-        </TimeWrapper>
-    </BarWrapper>
-)
+export const MusicLength:(props:{current:number,end:number,handleRange:(time:number)=>void})=>JSX.Element = ({current,end,handleRange}) =>{ 
+    const endTime = setMinuteTime(end);
+    const currentTime = setMinuteTime(current);
+    return(
+        <BarWrapper>
+            <TimeWrapper>
+                <RangeValue>{currentTime}</RangeValue>
+                <ProgressBar min={0} max={end} type="range" value={current} step={1} onChange={(e)=>handleRange(parseFloat(e.target.value))}></ProgressBar>
+                <RangeValue>{endTime}</RangeValue>
+            </TimeWrapper>
+        </BarWrapper>
+    )
+}

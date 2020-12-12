@@ -68,6 +68,19 @@ var initIpcEvent = function initIpcEvent() {
     });
     return folder;
   });
+  electron__WEBPACK_IMPORTED_MODULE_0__.ipcMain.handle("getImagePath", function (event) {
+    var image = electron__WEBPACK_IMPORTED_MODULE_0__.dialog.showOpenDialog({
+      properties: ["openFile"],
+      filters: [{
+        name: "image",
+        extensions: ["jpg", "jpeg", "png"]
+      }]
+    });
+    return image;
+  });
+  electron__WEBPACK_IMPORTED_MODULE_0__.ipcMain.on("getAppPath", function (event) {
+    event.returnValue = app.getAppPath();
+  });
 };
 
 /***/ }),

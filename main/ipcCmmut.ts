@@ -10,4 +10,16 @@ export const initIpcEvent = () =>{
         const folder = dialog.showOpenDialog({properties:["openDirectory"]});
         return folder;
     });
+    ipcMain.handle("getImagePath",event=>{
+        const image = dialog.showOpenDialog({
+            properties:["openFile"],
+            filters:[
+                {name:"image",extensions:["jpg","jpeg","png"]}
+            ]
+        });
+        return image;
+    });
+    ipcMain.on("getAppPath",event=>{
+        event.returnValue = app.getAppPath();
+    });
 }

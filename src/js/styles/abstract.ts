@@ -1,8 +1,8 @@
 import styled,{ css } from "styled-components";
 
-export const centerPlaced = css<{add?:string,Y?:number,X?:number}>`
+export const centerPlaced = css<{add?:string,y?:number,x?:number}>`
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: ${props=> `translate(${props.X || "-50"}%,${props.Y || "-50"}%)` + (props.add || "")};
+    transform: ${props=> `translate(${props.x || "-50"}%,${props.y || "-50"}%)` + (props.add || "")};
 `;

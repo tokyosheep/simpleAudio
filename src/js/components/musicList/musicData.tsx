@@ -6,11 +6,16 @@ import {ReduceType} from "../../redux/reducer/index";
 import {CurrentMusicType} from "../../redux/reducer/type";
 import styled from "styled-components";
 
+import {darken,lighten} from "polished";
+import {mainBlue,shine} from "../../styles/commonColor";
+
 const MusicWrapper = styled.tr<{on:boolean}>`
     width: 100%;
     height: 20px;
-    background: ${props=> props.on  ? "rgb(90,90,90)" : "rgb(20,20,20)"};
+    background: ${props=> props.on  ? "rgb(50,50,50)" : "rgb(20,20,20)"};
     cursor: pointer;
+    color:${props=> props.on ? lighten(0.1,mainBlue) : darken(0.1,mainBlue)};
+    text-shadow:${shine};
     &:hover{
         background: rgb(40,40,40);
     }

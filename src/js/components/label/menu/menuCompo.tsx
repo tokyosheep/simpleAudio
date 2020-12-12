@@ -1,15 +1,21 @@
 import * as React from "react";
+import {useCallback} from "react";
 import styled from "styled-components";
+import {useSelector,useDispatch} from "react-redux";
+import {ReduceType} from "../../../redux/reducer/index";
+
+import {setSwitchMonitor} from "../../../redux/actions/mapDispatchToProps";
 
 const MenuButton = styled.ul`
     width: 20px;
     height: 15px;
     top: 0;
     left: 90%;
-    position: relative;
+    position: absolute;
     list-style:none;
     padding: 0;
     cursor: pointer;
+    z-index: 25;
     li{
         position: absolute;
         top: 0px;
@@ -30,8 +36,11 @@ const MenuButton = styled.ul`
 `;
 
 const MenuCompo = () =>{
+    const isMenuAppeared = useSelector((state:ReduceType)=>state.settingsMonitor.menu);
+    const dispatch = useDispatch();
+    const handleMenuClick = useCallback(()=>dispatch(setSwitchMonitor("menu",!isMenuAppeared)),[isMenuAppeared]);
     return(
-        <MenuButton>
+        <MenuButton onClick={handleMenuClick}>
             <li></li>
             <li></li>
             <li></li>

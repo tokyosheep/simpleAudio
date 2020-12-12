@@ -1,5 +1,5 @@
 import * as React from "react";
-import styled from "styled-components";
+import styled,{keyframes} from "styled-components";
 import {useSelector,useDispatch} from "react-redux";
 
 import {ReduceType} from "../../redux/reducer/index";
@@ -26,16 +26,40 @@ const Reflct = styled.div`
     //border-radius: 20px;
 `;
 
+const moving = keyframes`
+    from{
+        left: 100%;
+    }
+    to{
+        left: -100%;
+    }
+`;
+
+const TitleSign = styled(DigiFont)<{size:number,on:boolean}>`
+    position: absolute;
+    animation:${moving} ${props=> props.on ? 9.6 : 0}s linear infinite;
+    top: 50%;
+    left: -100%;
+    transform:translateY(-50%);
+    display: block;
+    width: 100%;
+    font-weight: 200;
+`;
+
 const SongDisplayCompo = () =>{
     const currentMusic = useSelector((state:ReduceType)=>state.currentMusic);
-    console.log(currentMusic);
+    const isPaused = useSelector((state:ReduceType)=>state.isPaused);
+    /*
+    オーディオオブジェクトはオブジェクト自体生成されてから再生成されるわけではないのでプロパティの更新を
+    reduxが感知してくれない。なのでpausedプロパティだけ分離した。
+    */
     return(
         <SongDisplay>
             <ShapeReflect position={25} size={10}></ShapeReflect>
             <ShapeReflect position={40} size={20}></ShapeReflect>
             <ShapeReflect position={70} size={40}></ShapeReflect>
             <Reflct>
-                <DigiFont size={12}>{currentMusic?.title ?? "none" }</DigiFont>
+                <TitleSign size={15} on={currentMusic !== null && isPaused === false}>{currentMusic?.title ?? "none" }</TitleSign>
             </Reflct>
         </SongDisplay>
     )
