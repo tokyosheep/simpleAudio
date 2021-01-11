@@ -1,6 +1,5 @@
 import * as React from "react";
-import {useState} from "react";
-import {useSelector,useDispatch} from "react-redux";
+import {useSelector} from "react-redux";
 import {ReduceType} from "../../redux/reducer/index";
 import styled from "styled-components";
 import MenuCompo from "./menu/menuCompo";
@@ -9,7 +8,6 @@ import SpectrumSquare from "../audioSpectrum/spectrum";
 import SpectrumCircle from "../audioSpectrum/spectrumCircle";
 
 import {styleComponent} from "../../styles/containerStyle";
-import { type } from "os";
 const LabelData = styleComponent.labelData;
 
 const Curtain = styled.div`

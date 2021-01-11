@@ -1,6 +1,6 @@
 import * as React from "react";
-import {useMemo} from "react";
-import {useSelector,useDispatch} from "react-redux";
+import {useMemo,useEffect} from "react";
+import {useSelector} from "react-redux";
 import {ReduceType} from "../../redux/reducer/index";
 import styled from "styled-components";
 
@@ -19,16 +19,13 @@ const ButtonWrapper = styled.div`
     align-items:center;
 `;
 
-const Media = styled.video`
-    display: none;
-`;
-
 
 const ControlCompo = () =>{
     const currentMusic = useSelector((state:ReduceType)=>state.currentMusic);
-    const musics = useSelector((state:ReduceType)=>state.musics);
-    const [isPlayMusic, currentTime,playMusic,stopMusic,setMusic,setCurrentTime] = useAudio();
-    useMemo(()=>setMusic(currentMusic?.path ?? "" ),[currentMusic]);
+    //const audio = useSelector((state:ReduceType)=>state.audioObjShare);
+    const [isPlayMusic,currentTime,playMusic,stopMusic,setMusic,setCurrentTime] = useAudio();
+    useEffect(()=>setMusic(currentMusic?.path ?? "" ),[currentMusic]);
+    
     return(
         <Control>
             <IconWrapper></IconWrapper>

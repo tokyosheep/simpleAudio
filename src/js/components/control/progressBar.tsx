@@ -48,6 +48,7 @@ const TimeWrapper = styled.div`
 `;
 
 export const MusicLength:(props:{current:number,end:number,handleRange:(time:number)=>void})=>JSX.Element = ({current,end,handleRange}) =>{ 
+
     const endTime = setMinuteTime(end);
     const currentTime = setMinuteTime(current);
     return(

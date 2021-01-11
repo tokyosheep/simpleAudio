@@ -1,8 +1,9 @@
 import * as React from "react";
+import { useSelector } from "react-redux";
+import {ReduceType} from "../../redux/reducer/index";
 import styled from "styled-components";
 import {useRef} from "react";
 import useAudioContext from "./audioContext";
-import {mainBlue} from "../../styles/commonColor";
 
 const SpectrumC = styled.canvas`
     top: 30px;
@@ -11,7 +12,7 @@ const SpectrumC = styled.canvas`
     z-index: 5;
 `;
 
-const renderCircle:(spectrum:Uint8Array,canvas:HTMLCanvasElement|null)=>void = (spectrum,canvas) =>{
+export const renderCircle:(spectrum:Uint8Array,canvas:HTMLCanvasElement|null)=>void = (spectrum,canvas) =>{
     if(canvas === null)return;
 
     const canvasContext = canvas.getContext("2d");
@@ -55,9 +56,26 @@ const renderCircle:(spectrum:Uint8Array,canvas:HTMLCanvasElement|null)=>void = (
     }
 }
 
+const clearRender:(canvas:HTMLCanvasElement|null)=>void = canvas =>{
+    if(canvas === null) return;
+    const canvasContext = canvas.getContext("2d");
+    if(canvasContext === null)return;
+    canvasContext.clearRect(0,0,canvas.width,canvas.height);
+}
+
 const SpectrumCircle = () =>{
+    const isPaused = useSelector((state:ReduceType)=>state.isPaused);
     const canvas = useRef(null);
-    if(canvas !== null)useAudioContext(renderCircle,canvas.current);
+    const [stopTimer,startTimer] = useAudioContext(renderCircle,canvas.current);
+    if(canvas !== null && !isPaused)startTimer();
+    if(canvas !== null && isPaused){
+        try{
+            stopTimer();
+            clearRender(canvas.current);
+        }catch(e){
+            console.log(e);
+        }
+    }
     return(
         <SpectrumC ref={canvas} width={150} height={150}></SpectrumC>
     )

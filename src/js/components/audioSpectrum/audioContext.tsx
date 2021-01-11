@@ -1,9 +1,11 @@
 import * as React from "react";
-import {useState} from "react";
+import {useState,useEffect} from "react";
 import {useSelector} from "react-redux";
 import {ReduceType} from "../../redux/reducer/index";
 
-const useAudioContext:(render:(spectrumArray:Uint8Array,canvas:HTMLCanvasElement|null)=>void,canvas:HTMLCanvasElement|null)=>[()=>void|null,()=>void] = (render,canvas) =>{
+type Render = (spectrumArray:Uint8Array,canvas:HTMLCanvasElement|null)=>void;
+
+const useAudioContext:(render:Render,canvas:HTMLCanvasElement|null)=>[()=>void|null,()=>void] = (render,canvas) =>{
     const audio = useSelector((state:ReduceType)=>state.audioObjShare);
     console.log(audio);
         let analyzerNode:null|AnalyserNode = null;

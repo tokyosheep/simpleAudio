@@ -3,7 +3,7 @@ import {useSelector,useDispatch} from "react-redux";
 import {headToNextMusic} from "../../redux/actions/headNextMusix";
 import {ReduceType} from "../../redux/reducer/index";
 import {setCurrentMusic,setAudioStatus,setPaused} from "../../redux/actions/mapDispatchToProps";
-import {useState,useEffect} from "react";
+import {useState,useEffect,useMemo} from "react";
 
 const randomNum:(length:number)=>number = length =>{
     return Math.floor(Math.random()*length);
@@ -19,11 +19,13 @@ const useAudio:()=>[boolean,number,()=>void,()=>void,(url:string)=>void,(time:nu
     dispatch(setAudioStatus(audio));
     const [, _forceUpdate] = useState(false);
     const forceUpdate = () => _forceUpdate(prevState=> !prevState);
+    
 
     //audioメソッドは事前にthisを束縛しないといけない
     const play = () => audio.play.bind(audio);
     const pause = () =>audio.pause.bind(audio);
     const switchMusic = () =>{
+        console.log("end");
         if(options.repeat)audio.currentTime=0;
         if(options.succession)dispatch(headToNextMusic(musics,currentMusic));
         if(options.shuffle)dispatch(setCurrentMusic(musics[randomNum(musics.length)]));
@@ -34,14 +36,23 @@ const useAudio:()=>[boolean,number,()=>void,()=>void,(url:string)=>void,(time:nu
         audio.addEventListener("play", forceUpdate);
         audio.addEventListener("pause", forceUpdate);
         audio.addEventListener("ended",switchMusic);
+        audio.addEventListener("suspend",()=>{
+            console.log("suspended");
+            audio.currentTime = 0;
+            audio.src = "";
+            setAudio(new Audio());
+            dispatch(setPaused(audio.paused));
+        });
         audio.addEventListener("timeupdate", ()=>{
+            console.log(audio.currentTime);
             audio.removeEventListener("ended", forceUpdate);
             audio.addEventListener("ended",switchMusic);//endedイベントの関数は常に更新し続けないとredux変数も更新されない
             forceUpdate();
         });
+        
     },[options,musics,currentMusic]);
 
-    const setMusic:(url:string)=>void = async url => {
+    const setMusic:(url:string)=>void = url => {
         try{
             audio.src = url;//html input fileの場合、ファイルタイプの変換が必要だがlocalのパスを取得できる環境下では不要　
         }catch(e){
