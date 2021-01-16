@@ -1,42 +1,38 @@
 import * as React from "react";
 import {useCallback} from "react";
 import {useSelector,useDispatch} from "react-redux";
-import {setCurrentMusic} from "../../redux/actions/mapDispatchToProps";
-import {ReduceType} from "../../redux/reducer/index";
-import {CurrentMusicType} from "../../redux/reducer/type";
 import styled from "styled-components";
+import { CurrentMusicType , Albumtype , MusicType } from "../../redux/reducer/musics";
+import { currentMusic_set } from "../../redux/actions/dispatchMusics";
 
 import {darken,lighten} from "polished";
-import {mainBlue,shine} from "../../styles/commonColor";
+import StateType from "../../redux/StateType";
 
 const MusicWrapper = styled.tr<{on:boolean}>`
     width: 100%;
     height: 20px;
     background: ${props=> props.on  ? "rgb(50,50,50)" : "rgb(20,20,20)"};
     cursor: pointer;
-    color:${props=> props.on ? lighten(0.1,mainBlue) : darken(0.1,mainBlue)};
-    text-shadow:${shine};
+    color: #fff;
     &:hover{
         background: rgb(40,40,40);
     }
 `;
 
-const isCurrentMusic:(index:number,current:CurrentMusicType)=>boolean = (index,current) => current?.index === index ?? false;
+const isCurrentMusic:(present:MusicType,current:CurrentMusicType)=>boolean = (present,current) => present?.path === current?.path ?? false;
 
-const MusicData:(props:{title:string,artist:string,index:number,long:number})=>JSX.Element = (props) =>{
+const MusicData:(props:{title:string,artist:string,index:number,duration:number,albumIndex:number})=>JSX.Element = props=>{
     const dispatch = useDispatch();
-    const currentMusic = useSelector((state:ReduceType)=>state.currentMusic);
-    const musicList = useSelector((state:ReduceType)=>state.musics);
+    const currentMusicData = useSelector((state:StateType)=>state.currentMusic);
+    const albums = useSelector((state:StateType)=>state.albumList);
     const clickOnList = useCallback(()=>{
-        console.log("click");
-        dispatch(setCurrentMusic(musicList[props.index]));
-    },[currentMusic]);
-    console.log(currentMusic);
+        dispatch(currentMusic_set(albums[props.albumIndex].musics[props.index]));
+    },[currentMusicData]);
     return(
-        <MusicWrapper onClick={clickOnList} on={isCurrentMusic(props.index,currentMusic)}>
+        <MusicWrapper on={isCurrentMusic(albums[props.albumIndex].musics[props.index],currentMusicData)} onClick={clickOnList}>
             <th>{props.title}</th>
             <th>{props.artist}</th>
-            <th>{props.long}</th>
+            <th>{props.duration}</th>
         </MusicWrapper>
     )
 }

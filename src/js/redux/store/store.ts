@@ -1,19 +1,18 @@
-import {musics,volume,currentMusic,playOptions,audioObjShare,isPaused,spectrumType,backGroundPath,mainColor,settingsMonitor} from "../reducer/index";
-import {combineReducers,createStore} from "redux";
+import { combineReducers , createStore } from "redux";
 
-const RootReducer = combineReducers({
-    musics,
-    volume,
+import { albumList , currentMusic } from "../reducer/musics";
+import { background } from "../reducer/label";
+import { uiColor } from "../reducer/common";
+import { audioObject } from "../reducer/audio";
+
+const rootReducer = combineReducers({
+    albumList,
+    background,
+    uiColor,
     currentMusic,
-    playOptions,
-    audioObjShare,
-    isPaused,
-    spectrumType,
-    backGroundPath,
-    mainColor,
-    settingsMonitor
+    audioObject
 });
 
-const configStore = () => createStore(RootReducer);
+const configStore = () => createStore(rootReducer);
 
 export default configStore;

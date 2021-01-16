@@ -13,4 +13,4 @@ export const convertText:(minute:Minute)=>string = minute =>{
     return `${String(minute.min).padStart(2,"0")}:${String(minute.sec).padStart(2,"0")}`;
 }
 
-export const setMinuteTime:(time:number)=>string = time => convertText(setToMin(time));
+export const setMinuteTime:(time:number)=>string = time => isNaN(time) ? "00:00" : convertText(setToMin(time));

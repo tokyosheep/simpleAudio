@@ -1,8 +1,9 @@
 import * as React from "react";
 import styled from "styled-components";
 import {useSelector,useDispatch} from "react-redux";
-import {ReduceType} from "../../../redux/reducer/index";
-import {turnCoverImage} from "../../../fileSystem/turnBuffer";
+import StateType from "../../../redux/StateType";
+
+import { turnCoverImage } from "../../../fileSystem/turnBuffer";
 
 const CoverWrapper = styled.div`
     top: 20px;
@@ -19,9 +20,8 @@ const Image = styled.img`
 `; 
 
 const CoverPicture = () =>{
-    const currentMusic = useSelector((state:ReduceType)=>state.currentMusic);
+    const currentMusic = useSelector((state:StateType)=>state.currentMusic);
     const image = turnCoverImage(currentMusic);
-    console.log(image);
     return(
         <CoverWrapper >
             <Image src={image}></Image>

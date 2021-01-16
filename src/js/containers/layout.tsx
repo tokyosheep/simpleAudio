@@ -1,14 +1,22 @@
 import * as React from "react";
-import AudioContainer from "./audioMain";
+import { useMemo } from "react";
+import { useSelector , useDispatch } from "react-redux";
+import StateType from "../redux/StateType";
 
+import MusicListContainer from "../components/musicList/musicListContainer";
+import Label from "../components/label/Label";
+import SongDisplay from "../components/songDisplay/songDisplay";
+import ControlorCompo from "../components/controlor/controlor";
+import ValuemeCompo from "../components/volume/valume";
 import { createGlobalStyle } from "styled-components";
-import Setting from "../components/setting/setting";
+
+import { containers } from "../styles/containers";
+const { Container } = containers;
 
 const GlobalStyle = createGlobalStyle`
     body{
         margin: 0;
         font-family: "Helvetica Neue" , Helvetica , Arial , Verdana , Roboto , "游ゴシック" , "Yu Gothic" , "游ゴシック体" , "YuGothic" , "ヒラギノ角ゴ Pro W3" , "Hiragino Kaku Gothic Pro" , "Meiryo UI" , "メイリオ" , Meiryo , "ＭＳ Ｐゴシック" , "MS PGothic" , sans-serif;;
-
     }
     @font-face {
         font-family: 'DSEG7-Classic';
@@ -27,11 +35,21 @@ const GlobalStyle = createGlobalStyle`
 `;
 
 const Layout = () =>{
+    const current = useSelector((state:StateType)=>state.currentMusic);
+    const audio = useSelector((state:StateType)=>state.audioObject);
+    useMemo(()=>{
+        audio.setMusic(current?.path ?? "");
+    },[current]);
     return(
         <>
-            <GlobalStyle  />
-            <Setting />
-            <AudioContainer />
+            <GlobalStyle />
+            <Container>
+                <Label />
+                <SongDisplay />
+                <ControlorCompo />
+                <ValuemeCompo />
+                <MusicListContainer />
+            </Container>
         </>
     )
 }
