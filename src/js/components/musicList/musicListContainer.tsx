@@ -22,11 +22,9 @@ const MusicListContainer = () =>{
                 const musics = await Promise.allSettled(dropped.map(async(m)=>{
                     return  await getAlbumAndMusics(m.path);
                 }));
-                //const musics = await getAlbumAndMusics(dropped[0].path);
                 console.log(musics);
-                //if(!musics)return;
                 const albumList = musics.filter(m=> m.status === "fulfilled").map((r:any) => r.value);
-                console.log(albumList);
+                if(albumList[0]===false)return;
                 dispatch(album_add(albumList));
             })();
         }

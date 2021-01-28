@@ -1,8 +1,11 @@
 import * as React from "react";
 import { useMemo } from "react";
 import { useSelector , useDispatch } from "react-redux";
+import { window_set } from "../redux/actions/dispatchWIndow";
 import StateType from "../redux/StateType";
 
+import PlaylistContents from "../components/setPlayList/playListContainer";
+import SettingWrapper from "../components/setting/settingCompo";
 import MusicListContainer from "../components/musicList/musicListContainer";
 import Label from "../components/label/Label";
 import SongDisplay from "../components/songDisplay/songDisplay";
@@ -35,14 +38,14 @@ const GlobalStyle = createGlobalStyle`
 `;
 
 const Layout = () =>{
-    const current = useSelector((state:StateType)=>state.currentMusic);
-    const audio = useSelector((state:StateType)=>state.audioObject);
-    useMemo(()=>{
-        audio.setMusic(current?.path ?? "");
-    },[current]);
+    const dispatch = useDispatch();
+    window.addEventListener("resize",()=>dispatch(window_set([window.innerWidth,window.innerHeight])));
+    useMemo(()=>dispatch(window_set([window.innerWidth,window.innerHeight])),[]);
     return(
         <>
             <GlobalStyle />
+            <PlaylistContents />
+            <SettingWrapper />
             <Container>
                 <Label />
                 <SongDisplay />

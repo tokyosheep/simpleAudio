@@ -2,13 +2,15 @@ import * as React from "react";
 import styled from "styled-components";
 import MusicData from "./musicData";
 import MusicMenu from "./menu";
+import PlayListCompo from "./playListMusics/playList";
 import {useSelector,useDispatch} from "react-redux";
 import StateType from "../../redux/StateType";
-import {DndProvider,DropTargetMonitor,useDrop} from "react-dnd";
-import {HTML5Backend, NativeTypes} from "react-dnd-html5-backend";
+import { useDrop } from "react-dnd";
+import { NativeTypes} from "react-dnd-html5-backend";
 
 import { containers } from "../../styles/containers";
 import { DropFunc } from "./musicListContainer";
+import { darken } from "polished";
 const { MusicListWrapper } = containers;
 
 const ListWrapper = styled.table`
@@ -29,7 +31,19 @@ const TableHeader = styled.tr`
     }
 `;
 
+const AlbumTitle = styled.tr<{color:string}>`
+    color: #fff;
+    font-weight: 200;
+    font-size: 12px;
+    background: ${props =>`linear-gradient(45deg ,${darken(0.4,props.color)},rgb(0,0,0))`};
+    td{
+        background: rgba(30,30,30,0.1);
+    }
+`;
+
 export const MusicList:(props:{onDrop:DropFunc})=>JSX.Element = props =>{
+    const uiColor = useSelector((state:StateType)=>state.uiColor);
+    const modeMusic = useSelector((state:StateType)=>state.modeWindow.playlist);
     const { onDrop } = props;
     const [{canDrop,isOver},drop] = useDrop({
         accept:[NativeTypes.FILE],
@@ -48,7 +62,7 @@ export const MusicList:(props:{onDrop:DropFunc})=>JSX.Element = props =>{
         const musics = album.musics.map((music,i)=><MusicData key={i} title={music.title} artist={music.artist} duration={music.duration} index={i} albumIndex={index}/>);
         return(
         <tbody  key={album.name}>
-            <tr>
+            <AlbumTitle color={uiColor}>
                 <td >
                     {album.name}
                 </td>
@@ -58,7 +72,7 @@ export const MusicList:(props:{onDrop:DropFunc})=>JSX.Element = props =>{
                 <td>
                     remove
                 </td>
-            </tr>
+            </AlbumTitle>
             {musics}
         </tbody>
         );
@@ -75,7 +89,14 @@ export const MusicList:(props:{onDrop:DropFunc})=>JSX.Element = props =>{
                         <th>duration</th>
                     </TableHeader>
                 </thead>
-                {albumList}
+                {
+                    modeMusic 
+                    ?
+                        <PlayListCompo />
+                    :
+                    albumList
+                    
+                }
             </ListWrapper>
         </MusicListWrapper>
     )

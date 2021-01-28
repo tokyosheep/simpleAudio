@@ -3,7 +3,7 @@ import { useCallback } from "react";
 import styled from "styled-components";
 import {useSelector,useDispatch} from "react-redux";
 import StateType from "../../redux/StateType";
-import { shineStyle } from "../../styles/mixin";
+import { rgba } from "polished";
 
 import {setMinuteTime} from "../../fileSystem/timeConvert";
 
@@ -14,9 +14,10 @@ export const ProgressBar = styled.input<{color:string}>`
     height: 1px;
     width: 80%;
     background: ${props=>props.color};
-    ${shineStyle}
+    box-shadow:0px 0px 3px 3px ${props=>rgba(props.color,0.4)};
     border-radius: 3px;
     vertical-align: middle;
+    transition: .3s linear;
     &::-webkit-slider-thumb{
         appearance: none;
         width: 12px;
@@ -50,20 +51,16 @@ const TimeWrapper = styled.div`
     box-sizing:border-box;
 `;
 
-export const MusicLength:()=>JSX.Element = () =>{ 
+export const MusicLength:(props:{currentTime:number,setCurrentTime:(time:number)=>void})=>JSX.Element = ({currentTime,setCurrentTime}) =>{ 
     const uiColor = useSelector((state:StateType)=>state.uiColor);
     const audioObj = useSelector((state:StateType)=>state.audioObject);
-    const handleRange = useCallback(e=>{
-        audioObj.currentTime = parseFloat(e.target.value);
-    },[audioObj.currentTime]);
-    console.log(audioObj);
-    console.log(audioObj.currentTime);
+    const currentMusic = useSelector((state:StateType)=>state.currentMusic);
     return(
         <BarWrapper>
             <TimeWrapper>
-                <RangeValue>{setMinuteTime(audioObj.currentTime)}</RangeValue>
-                <ProgressBar color={uiColor} min={0} max={(isNaN(audioObj.duration) ? 0 : audioObj.duration)} type="range" value={audioObj.currentTime} step={1} onChange={(e)=>handleRange(e)}></ProgressBar>
-                <RangeValue>{setMinuteTime(audioObj.duration)}</RangeValue>
+                <RangeValue>{setMinuteTime(currentTime)}</RangeValue>
+                <ProgressBar color={uiColor} min={0} max={(currentMusic?.duration ?? 100)} type="range" value={currentTime} step={1} onChange={(e)=>setCurrentTime(parseFloat(e.target.value))}></ProgressBar>
+                <RangeValue>{setMinuteTime(currentMusic?.duration ?? 0)}</RangeValue>
             </TimeWrapper>
         </BarWrapper>
     )

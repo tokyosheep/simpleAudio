@@ -24,8 +24,8 @@ var debug = true;
 (0,_ipcCmmut__WEBPACK_IMPORTED_MODULE_1__.initIpcEvent)();
 app.on("ready", function () {
   mainWindow = new BrowserWindow({
-    width: 600 + (debug ? 200 : 0),
-    height: 400,
+    width: 800 + (debug ? 200 : 0),
+    height: 500,
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false
@@ -77,6 +77,16 @@ var initIpcEvent = function initIpcEvent() {
       }]
     });
     return image;
+  });
+  electron__WEBPACK_IMPORTED_MODULE_0__.ipcMain.handle("getVideoPath", function (event) {
+    var video = electron__WEBPACK_IMPORTED_MODULE_0__.dialog.showOpenDialog({
+      properties: ["openFile"],
+      filters: [{
+        name: "image",
+        extensions: ["mp4", "mov", "avi"]
+      }]
+    });
+    return video;
   });
   electron__WEBPACK_IMPORTED_MODULE_0__.ipcMain.on("getAppPath", function (event) {
     event.returnValue = app.getAppPath();

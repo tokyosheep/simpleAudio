@@ -3,8 +3,10 @@ import {useMemo} from "react";
 import {useSelector,useDispatch} from "react-redux";
 import StateType from "../../redux/StateType";
 import styled from "styled-components";
-import { PlayButton } from "./buttons";
+import { PlayButton , StopButton , BackTrack , HeadTrack } from "./buttons";
 import MusicLength from "./progressBar";
+import useAudio from "./hooks/useAudio";
+import OptionBars from "./optionBar/options";
 
 import { containers } from "../../styles/containers";
 const { ConrolWrapper } = containers;
@@ -16,12 +18,17 @@ const ButtonWrapper = styled.div`
 `;
 
 const ControlorCompo = () =>{
+    const [isPlayMusic, currentTime , playMusic , stopMusic , setMusic , setCurrentTime ] = useAudio();
     return(
         <ConrolWrapper>
+            <OptionBars />
             <ButtonWrapper>
-                <PlayButton />
+                <BackTrack />
+                <PlayButton playMusic={playMusic}/>
+                <StopButton func={stopMusic} />
+                <HeadTrack />
             </ButtonWrapper>
-            <MusicLength />
+            <MusicLength currentTime={currentTime} setCurrentTime={setCurrentTime}/>
         </ConrolWrapper>
     )
 }

@@ -1,16 +1,27 @@
 import { combineReducers , createStore } from "redux";
 
-import { albumList , currentMusic } from "../reducer/musics";
-import { background } from "../reducer/label";
+import { albumList , currentMusic , playList } from "../reducer/musics";
+import { background , videoPath , visualSetiing } from "../reducer/label";
 import { uiColor } from "../reducer/common";
-import { audioObject } from "../reducer/audio";
+import { audioObject , volume , isPaused , playOptions } from "../reducer/audio";
+import { filterData } from "../reducer/filter";
+import { windowSize , modeWindow } from "../reducer/window";
 
 const rootReducer = combineReducers({
     albumList,
     background,
     uiColor,
     currentMusic,
-    audioObject
+    audioObject,
+    volume,
+    isPaused,
+    playOptions,
+    videoPath,
+    visualSetiing,
+    filterData,
+    windowSize,
+    modeWindow,
+    playList
 });
 
 const configStore = () => createStore(rootReducer);

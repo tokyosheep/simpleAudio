@@ -10,7 +10,7 @@ const debug = true
 initIpcEvent();
 
 app.on("ready",()=>{
-    mainWindow = new BrowserWindow({width:600 + (debug ? 200 : 0),height:400,
+    mainWindow = new BrowserWindow({width:800 + (debug ? 200 : 0),height:500,
         webPreferences:{
             nodeIntegration: true,
             contextIsolation: false

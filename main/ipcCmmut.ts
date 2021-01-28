@@ -19,6 +19,15 @@ export const initIpcEvent = () =>{
         });
         return image;
     });
+    ipcMain.handle("getVideoPath",event=>{
+        const video = dialog.showOpenDialog({
+            properties:["openFile"],
+            filters:[
+                {name:"image",extensions:["mp4","mov","avi"]}
+            ]
+        });
+        return video;
+    })
     ipcMain.on("getAppPath",event=>{
         event.returnValue = app.getAppPath();
     });
