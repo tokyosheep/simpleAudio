@@ -32,7 +32,7 @@ const MusicList = () =>{
     const albumList = useSelector((state:StateType)=>state.albumList);
     const albums = albumList.map((m,i)=>{
         return(
-                <AlbumList album={m} key={i}/>
+                <AlbumList album={m} key={i} albumIndex={i}/>
         )
     })
     return(

@@ -48,13 +48,15 @@ export type PlayingOption = {
     [key:string]:boolean,
     repeat:boolean,
     succession:boolean,
-    shuffle:boolean
+    shuffle:boolean,
+    noOption:boolean
 };
 
 const initOption:PlayingOption = {
     repeat:false,
     succession:true,
-    shuffle:false
+    shuffle:false,
+    noOption:false
 };
 
 export type PlayOptionAction = {type:"playOption_set",prop:string,value:boolean};

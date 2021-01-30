@@ -58,6 +58,7 @@ export const MusicList:(props:{onDrop:DropFunc})=>JSX.Element = props =>{
         })
     });
     const albums = useSelector((state:StateType)=>state.albumList);
+    console.log(albums);
     const albumList = albums.map((album,index)=>{
         const musics = album.musics.map((music,i)=><MusicData key={i} title={music.title} artist={music.artist} duration={music.duration} index={i} albumIndex={index}/>);
         return(

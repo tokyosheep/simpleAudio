@@ -2,8 +2,14 @@ import * as React from "react";
 import { useMemo } from "react";
 import { useSelector , useDispatch } from "react-redux";
 import { window_set } from "../redux/actions/dispatchWIndow";
+import { album_add } from "../redux/actions/dispatchMusics";
+import { playList_set } from "../redux/actions/dispatchPlayList";
 import StateType from "../redux/StateType";
+import { RecordType } from "../../../main/DataBase";
+import electron, { ipcRenderer } from "electron";
+import useRecord from "./commutDataBase";
 
+import OverLayer from "../overCompo/overLayer";
 import PlaylistContents from "../components/setPlayList/playListContainer";
 import SettingWrapper from "../components/setting/settingCompo";
 import MusicListContainer from "../components/musicList/musicListContainer";
@@ -39,11 +45,26 @@ const GlobalStyle = createGlobalStyle`
 
 const Layout = () =>{
     const dispatch = useDispatch();
-    window.addEventListener("resize",()=>dispatch(window_set([window.innerWidth,window.innerHeight])));
-    useMemo(()=>dispatch(window_set([window.innerWidth,window.innerHeight])),[]);
+    useRecord();
+    useMemo(()=>{
+        window.addEventListener("resize",()=>dispatch(window_set([window.innerWidth,window.innerHeight])));
+        dispatch(window_set([window.innerWidth,window.innerHeight]));
+        (async()=>{
+            try{
+                const data:RecordType[] = await ipcRenderer.invoke("loadAllData");
+                console.log(data);
+                dispatch(album_add(data[0].albums));
+                dispatch(playList_set(data[0].playList));
+                console.log(data);
+            }catch(e){
+                console.log(e)
+            }
+        })();
+    },[]);
     return(
         <>
             <GlobalStyle />
+            <OverLayer />
             <PlaylistContents />
             <SettingWrapper />
             <Container>

@@ -4,7 +4,7 @@ import {useSelector,useDispatch} from "react-redux";
 import styled from "styled-components";
 import { CurrentMusicType , MusicType } from "../../redux/reducer/musics";
 import { currentMusic_set } from "../../redux/actions/dispatchMusics";
-import { plsyList_setMusicIndex } from "../../redux/actions/dispatchPlayList";
+import { playList_setMusicIndex } from "../../redux/actions/dispatchPlayList";
 
 import StateType from "../../redux/StateType";
 
@@ -19,7 +19,7 @@ const MusicWrapper = styled.tr<{on:boolean}>`
     }
 `;
 
-const isCurrentMusic:(present:MusicType,current:CurrentMusicType)=>boolean = (present,current) => present?.path === current?.path ?? false;
+export const isCurrentMusic:(present:MusicType,current:CurrentMusicType)=>boolean = (present,current) => present?.path === current?.path ?? false;
 
 const MusicData:(props:{title:string,artist:string,index:number,duration:number,albumIndex:number})=>JSX.Element = props=>{
     const dispatch = useDispatch();
@@ -42,10 +42,11 @@ export default MusicData;
 export const PlayListData:(props:{title:string,artist:string,index:number,duration:number})=>JSX.Element = props =>{
     const dispatch = useDispatch();
     const playlist = useSelector((state:StateType)=>state.playList);
-    const clickOnList = useCallback(()=>{
-            dispatch(plsyList_setMusicIndex(props.index));
-    },[playlist]);
     const currentList = playlist.find(p=> p.selected);
+    const clickOnList = useCallback(()=>{
+        dispatch(playList_setMusicIndex(props.index));
+        dispatch(currentMusic_set(currentList?.musics[props.index] ?? null ));
+    },[playlist]);
     return(
         <MusicWrapper on={currentList?.currentMusicIndex === props.index ?? false} onClick={clickOnList}>
             <th>{props.title}</th>

@@ -7,6 +7,7 @@ import { PlayListData } from "../musicData";
 
 const PlayListCompo = () =>{
     const playList = useSelector((state:StateType)=>state.playList);
+    console.log(playList);
     const currentList = playList.find(p=> p.selected===true);
     const listRaws = currentList?.musics.map((m,i)=><PlayListData title={m.title} artist={m.artist} duration={m.duration} index={i} key={i}></PlayListData>) ?? <></>;
 

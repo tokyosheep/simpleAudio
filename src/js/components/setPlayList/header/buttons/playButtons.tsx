@@ -4,6 +4,7 @@ import {useSelector,useDispatch} from "react-redux";
 import styled from "styled-components";
 import StateType from "../../../../redux/StateType";
 import { windowMode_set } from "../../../../redux/actions/dispatchWIndow";
+import { playList_remove } from "../../../../redux/actions/dispatchPlayList";
 import PlayListButton,{ OffPlayListButton } from "./playListButton";
 
 const ButtonWrapper = styled.div`
@@ -16,12 +17,13 @@ const ButtonWrapper = styled.div`
 const PlayHeaderButtons = () =>{
     const dispatch = useDispatch();
     const modeWindow = useSelector((state:StateType)=>state.modeWindow);
-    const addPlayList = useCallback(()=>{},[]);
-    const removePlayList = useCallback(()=>{},[]);
+    const playList = useSelector((state:StateType)=>state.playList);
+    const removePlayList = useCallback(()=>dispatch(playList_remove()),[playList]);
     const offPlayList = useCallback(()=>dispatch(windowMode_set(false,"setPlayList")),[modeWindow]);
+    const handleWindow = useCallback(()=>dispatch(windowMode_set(true,"fillPlayListName")),[modeWindow.fillPlayListName]);
     return(
         <ButtonWrapper>
-            <PlayListButton name="add playList" func={addPlayList}></PlayListButton>
+            <PlayListButton name="add playList" func={handleWindow}></PlayListButton>
             <PlayListButton name="remove playList" func={removePlayList}></PlayListButton>
             <OffPlayListButton name="off" func={offPlayList}></OffPlayListButton>
         </ButtonWrapper>

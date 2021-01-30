@@ -6,9 +6,8 @@ import { playOptions_set } from "../../../redux/actions/dispatchAudio";
 import StateType from "../../../redux/StateType";
 import { darken } from "polished";
 
-import { FiRepeat, FiArrowRight , FiShuffle } from "react-icons/fi";
+import { FiRepeat, FiArrowRight , FiShuffle , FiMinus } from "react-icons/fi";
 import { shineSVG , centerPlaced } from "../../../styles/mixin";
-import { PlayingOption } from "../../../redux/reducer/audio";
 
 const optionsButton = css<{color:string,on:string}>`
     ${centerPlaced}
@@ -38,6 +37,10 @@ const ShuffleIcon = styled(FiShuffle)<{color:string,on:string}>`
     ${optionsButton}
 `;
 
+const NoOption = styled(FiMinus)<{color:string,on:string}>`
+    ${optionsButton}
+`;
+
 const OptionWrapper = styled.div`
     display: flex;
     justify-content:space-around;
@@ -57,6 +60,9 @@ const getIconElm:(color:string,key:string,value:string,func:(key:string,value:st
 
         case "shuffle":
             return <ShuffleIcon color={color} on={value} onClick={()=>func(key,value)}></ShuffleIcon>;
+
+        case "noOption":
+            return <NoOption color={color} on={value} onClick={()=>func(key,value)}></NoOption>
 
         default:
             return <div></div>;

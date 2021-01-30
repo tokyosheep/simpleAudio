@@ -9,6 +9,7 @@ export interface MusicType{
     fileName:string,
     index:number,
     imageBuffer?:Buffer|string|null,
+    selected:boolean
 }
 
 export class MusicData implements MusicType{
@@ -22,7 +23,8 @@ export class MusicData implements MusicType{
         public path:string,
         public fileName:string,
         public index:number,
-        public imageBuffer?:Buffer|string|null
+        public imageBuffer?:Buffer|string|null,
+        public selected:boolean = false
         ){
         
     }
@@ -32,13 +34,15 @@ export interface Albumtype{
     musics:MusicType[]
     path:string,
     name:string,
+    selected:boolean
 }
 
 export class AlubumData implements Albumtype{
     constructor(
         public musics:MusicType[],
         public path:string,
-        public name:string
+        public name:string,
+        public selected:boolean = false
     ){
 
     }
@@ -46,18 +50,31 @@ export class AlubumData implements Albumtype{
 
 const initAlbums:Albumtype[] = [];
 
-export type AlbumAction = {type:"album_add",album:Albumtype[]}|{type:"album_remove",index:number};
+export type AlbumAction = {type:"album_add",album:Albumtype[]}|{type:"album_remove",index:number}
+|{type:"album_setIndex",albumIndex:number,musicIndex:number};
 type AlbumReducer = (state:Albumtype[],action:AlbumAction)=>Albumtype[];
 
 export const albumList:AlbumReducer = (state=initAlbums,action) =>{
     switch(action.type){
         case "album_add":
+            //const add = action.album.filter(m=> state.some(s=> s.path === m.path));
             const albums = [...state,...action.album];
             return albums;
 
         case "album_remove":
             const removed = state.filter((a,i)=> i===action.index);
             return removed;
+
+        case "album_setIndex":
+            state.forEach(album=> {
+                if(album.selected){
+                    album.selected = false;
+                    album.musics.forEach(music=> music.selected = false);
+                }
+            });
+            state[action.albumIndex].selected = true;
+            state[action.albumIndex].musics[action.musicIndex].selected = true;
+            return [...state];
 
         default:
             return state;
@@ -104,6 +121,7 @@ class PlayListClass implements PlayListType{
     }
     removeMusic(index:number){
         this.musics = this.musics.filter((m,i)=> i!==index);
+        if(this.currentMusicIndex > index)this.currentMusicIndex--;
     }
     setSelected(on:boolean){
         this.selected = on;
@@ -113,12 +131,13 @@ class PlayListClass implements PlayListType{
     }
 }
 
-const initPlayList:PlayListType[] = [new PlayListClass("playlist",0,[]),new PlayListClass("playlistTwo",1,[]),new PlayListClass("playlistThree",2,[])];
+const initPlayList:PlayListType[] = [new PlayListClass("playlist",0,[])/*,new PlayListClass("playlistTwo",1,[]),new PlayListClass("playlistThree",2,[])*/];
 initPlayList[0].setSelected(true);
-export type PlayListAction = {type:"playMusic_add",music:MusicType,musicIndex:number,listIndex:number}
-                            |{type:"playMusic_remove",musicIndex:number,listIndex:number}
+export type PlayListAction = {type:"playList_set",list:PlayListType[]}
+                            |{type:"playMusic_add",music:MusicType,musicIndex:number}
+                            |{type:"playMusic_remove",musicIndex:number}
                             |{type:"playList_add",name:string}
-                            |{type:"playList_remove",index:number}
+                            |{type:"playList_remove"}
                             |{type:"playList_selected",index:number}
                             |{type:"playMusic_switch",target:number,replace:number}
                             |{type:"playMusic_setIndex",musicIndex:number};
@@ -127,23 +146,35 @@ type PlayListReducer = (state:PlayListType[],action:PlayListAction)=>PlayListTyp
 
 export const playList:PlayListReducer = (state=initPlayList,action)=>{
     switch(action.type){
+
+        case "playList_set":
+            const list  = action.list.map(l=> new PlayListClass(l.name,l.index,l.musics,l.selected,l.currentMusicIndex));
+            console.log(list);
+            return list;
+
         case "playList_add":
             return [...state,new PlayListClass(action.name,state.length+1,[])];
 
         case "playList_remove":
-            return state.filter((p,i)=> i !== action.index);
+            const unSelected = state.filter((p,i)=> p.selected === false);
+            console.log(unSelected);
+            if(unSelected.length > 0)unSelected[0].selected = true;
+            return [...unSelected];
 
         case "playMusic_add":
-            const newList =state[action.listIndex];
+            const newList = state.find(pList => pList.selected);
+            const selectedIndex = state.findIndex(pList => pList.selected);
             console.log(newList);
+            if(newList === undefined)return state;
             newList.addMusic(action.music,action.musicIndex);
-            state[action.listIndex] = newList;
+            state[selectedIndex] = newList;
             return [...state];
 
         case "playMusic_remove":
-            const nextList = {...state[action.listIndex]};
+            const currentList = state.findIndex(s=>s.selected);
+            const nextList = state[currentList];
             nextList.removeMusic(action.musicIndex);
-            state[action.listIndex] = nextList;
+            state[currentList] = nextList;
             return [...state];
 
         case "playList_selected":
@@ -177,3 +208,4 @@ export const playList:PlayListReducer = (state=initPlayList,action)=>{
             return state;
     }
 }
+

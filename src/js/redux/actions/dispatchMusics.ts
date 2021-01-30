@@ -11,3 +11,8 @@ export const album_remove:(index:number)=>AlbumAction = index =>{
 export const currentMusic_set:(current:CurrentMusicType)=>CurrentMusicAction = current =>{
     return{type:"currentMusic_set",music:current};
 }
+
+export const album_setIndex:(albumIndex:number,musicIndex:number)=>AlbumAction = (albumIndex,musicIndex) =>{
+    return{type:"album_setIndex",albumIndex:albumIndex,musicIndex:musicIndex};
+}
+

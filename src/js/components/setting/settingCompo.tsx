@@ -10,7 +10,6 @@ import BackgroundCompo from "./background/background";
 import ColorList from "./colorList/colorList";
 import FilterSliders from "./filter/filterSlider";
 import { rgba } from "polished";
-import { windowWidth } from "../../styles/containers";
 import { shineSVG } from "../../styles/mixin";
 
 

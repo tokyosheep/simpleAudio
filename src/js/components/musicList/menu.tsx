@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
-import { useCallback } from "react";
+import { useCallback , useState } from "react";
+import { CurrentMusicType } from "../../redux/reducer/musics";
 import {useSelector,useDispatch} from "react-redux";
 import StateType from "../../redux/StateType";
 import { windowMode_set } from "../../redux/actions/dispatchWIndow";

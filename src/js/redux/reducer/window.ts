@@ -17,13 +17,15 @@ export type ModeWindow = {
     [key:string]:boolean,
     setting:boolean,
     playlist:boolean,
-    setPlayList:boolean
+    setPlayList:boolean,
+    fillPlayListName:boolean
 }
 
 const initModeWindow:ModeWindow = {
     setting:false,
     playlist:false,
-    setPlayList:false
+    setPlayList:false,
+    fillPlayListName:false
 }
 
 export type ModeAction = {type:"modeWin_set",on:boolean,prop:string};

@@ -4,7 +4,7 @@ import styled from "styled-components";
 import {useSelector,useDispatch} from "react-redux";
 import StateType from "../../../../redux/StateType";
 import { MusicType , Albumtype } from "../../../../redux/reducer/musics";
-import { playMusic_add , playMusic_switch } from "../../../../redux/actions/dispatchPlayList";
+import { playMusic_add , playMusic_switch , playList_setMusicIndex } from "../../../../redux/actions/dispatchPlayList";
 import { BoxTitle } from "../playListMain";
 import { useDrop , useDrag } from 'react-dnd';
 import { ItemType } from "../playListMain";
@@ -42,8 +42,12 @@ const TableMusicList = styled.tbody`
     }
 `;
 
-const MusicDataRaw = styled.tr<{drop:boolean}>`
-    background: ${props=> props.drop ? "rgb(60,60,60)" : "rgb(0,0,0)"};
+const MusicDataRaw = styled.tr<{isOver:boolean}>`
+    background: ${props=> props.isOver ? "rgb(60,60,60)" : "rgb(0,0,0)"};
+    cursor: pointer;
+    &:hover{
+        background: "rgb(30,30,30)";
+    }
 `;
 
 const MusicRaws:(props:{music:MusicType,index:number})=>JSX.Element = ({music,index}) =>{
@@ -52,7 +56,7 @@ const MusicRaws:(props:{music:MusicType,index:number})=>JSX.Element = ({music,in
     const currentList = playList.find(p=> p.selected === true);
     const handleDragOnMusic = useCallback((music)=>{
         if(currentList===undefined)return;
-        dispatch(playMusic_add(music,index,currentList.index));
+        dispatch(playMusic_add(music,index));
     },[currentList]);
     const handleSwitchMusic = useCallback((target,replace)=>{
         dispatch(playMusic_switch(target,replace));
@@ -89,10 +93,12 @@ const MusicRaws:(props:{music:MusicType,index:number})=>JSX.Element = ({music,in
             canDrop:monitor.canDrop(),
         }),
     });
-    const isActive = canDrop && isOver;
+    const isActive = (canDrop && isOver) || index === currentList?.currentMusicIndex;
     drag(drop(ref));
+    console.log(index);
+    const handleClickRaw = useCallback(()=>dispatch(playList_setMusicIndex(index)),[currentList]);
     return(
-        <MusicDataRaw ref={ref} drop={isActive}>
+        <MusicDataRaw ref={ref} isOver={isActive} onClick={handleClickRaw} >
             <td>{music.title}</td>
             <td>{music.artist}</td>
         </MusicDataRaw>
@@ -105,7 +111,7 @@ const PlatListMusicCompo = () =>{
     const currentList = playListData.find(p=> p.selected===true);
     const handleAddList = useCallback((m)=>{
         if(currentList===undefined)return;
-        dispatch(playMusic_add(m,currentList.musics.length,currentList.index))
+        dispatch(playMusic_add(m,currentList.musics.length))
     },[currentList]);
     const [{canDrop , isOver } , drop] = useDrop({
         accept:ItemType.MUSIC,

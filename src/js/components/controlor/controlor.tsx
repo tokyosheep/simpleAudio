@@ -18,7 +18,12 @@ const ButtonWrapper = styled.div`
 `;
 
 const ControlorCompo = () =>{
+    const currentMusic = useSelector((state:StateType)=>state.currentMusic);
     const [isPlayMusic, currentTime , playMusic , stopMusic , setMusic , setCurrentTime ] = useAudio();
+    useMemo(()=>{
+        setMusic(currentMusic?.path ?? "");
+        stopMusic();
+    },[currentMusic]);
     return(
         <ConrolWrapper>
             <OptionBars />
