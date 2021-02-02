@@ -1,6 +1,6 @@
 import * as React from "react";
 import styled from "styled-components";
-import {useRef,useState} from "react";
+import {useRef,useMemo} from "react";
 import useAudioContext from "./audioContext";
 import { useSelector } from "react-redux";
 import StateType from "../../../redux/StateType";
@@ -36,13 +36,13 @@ const SpectrumSquare = () =>{
     const isPaused = useSelector((state:StateType)=>state.isPaused);
     const canvas = useRef(null);
     const [stopTimer,startTimer] = useAudioContext(render,canvas.current);
-    
-    if(canvas !== null && !isPaused )startTimer();
-    if(canvas !== null && isPaused){
-        stopTimer();
-        clearRender(canvas.current);
-    }
-    console.log(isPaused);
+    useMemo(()=>{
+        if(canvas !== null && !isPaused )startTimer();
+        if(canvas !== null && isPaused){
+            stopTimer();
+            clearRender(canvas.current);
+        }
+    },[isPaused]);
     return(
         <SpectrumS ref={canvas} width={200} height={60}></SpectrumS>
     )

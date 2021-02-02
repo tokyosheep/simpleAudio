@@ -6,7 +6,7 @@ import { useState , useEffect , useMemo} from "react";
 import { playList_setMusicIndex } from "../../../redux/actions/dispatchPlayList";
 import { audioStatus_set , paused_set } from "../../../redux/actions/dispatchAudio";
 import { currentMusic_set , album_setIndex } from "../../../redux/actions/dispatchMusics";
-import { headToNextMusic , headNextPlayList , headNextMusicIndex } from "../../../redux/actions/moveNextMusic";
+import { headNextPlayList , headNextMusicIndex } from "../../../redux/actions/moveNextMusic";
 
 const randomNum:(length:number)=>number = length =>{
     return Math.floor(Math.random()*length);
@@ -63,19 +63,24 @@ const useAudio:()=>[boolean,number,()=>void,()=>void,(url:string)=>void,(time:nu
         }else{
             pause()();
         }
+        dispatch(paused_set(audio.paused));
         forceUpdate();
     }
 
     useEffect(()=>{
+        const registerEnded = () =>{
+            //audio.removeEventListener("ended", switchMusic);
+            audio.addEventListener("ended", switchMusic);
+            forceUpdate();
+        }
         audio.addEventListener("play", forceUpdate);
         audio.addEventListener("pause", forceUpdate);
-        audio.addEventListener("ended", switchMusic);
-        audio.addEventListener("timeupdate",forceUpdate);
+        audio.addEventListener("timeupdate",registerEnded);
         return()=>{
             audio.removeEventListener("play", forceUpdate);
             audio.removeEventListener("pause", forceUpdate);
             audio.removeEventListener("ended", switchMusic);
-            audio.removeEventListener("timeupdate",forceUpdate);
+            audio.removeEventListener("timeupdate",registerEnded);
         };
     },[options,albumList,currentMusic]);
 
@@ -91,10 +96,10 @@ const useAudio:()=>[boolean,number,()=>void,()=>void,(url:string)=>void,(time:nu
     const stopMusic = () =>{
         audio.currentTime = 0;
         pause()();
-        audio.src = "";
-        const newAudio = new Audio();
-        setAudio(newAudio);
-        dispatch(audioStatus_set(newAudio));
+        //audio.src = "";
+        //const newAudio = new Audio();
+        //setAudio(newAudio);
+        //dispatch(audioStatus_set(newAudio));
         dispatch(paused_set(audio.paused));
     }
 
@@ -109,7 +114,7 @@ const useAudio:()=>[boolean,number,()=>void,()=>void,(url:string)=>void,(time:nu
         dispatch(paused_set(audio.paused));
     };
 
-    useEffect(()=>{
+    useMemo(()=>{
         console.log("paused");
         if(pauseStatus !== audio.paused)pause()();
     },[pauseStatus]);

@@ -7,16 +7,28 @@ import { containers } from "../../styles/containers";
 const { SongDisplayWrapper } = containers;
 import { DigiFont } from "../../styles/digiFont";
 import { centerPlaced } from "../../styles/mixin";
+import { rgba } from "polished";
 
-const TitleSign = styled(DigiFont)<{size:number}>`
+const moving = keyframes`
+    from{
+        left: 100%;
+    }
+    to{
+        left: -100%;
+    }
+`;
+
+const TitleSign = styled(DigiFont)<{size:number,on:boolean,color:string}>`
     position: absolute;
     top: 50%;
     left: 0;
+    animation:${moving} ${props=> props.on ? 9.6 : 0}s linear infinite;
     transform:translateY(-50%);
     display: block;
     width: 100%;
     font-weight: 200;
-    color: #fff;
+    color: ${props=> props.color};
+    text-shadow:0px 0px 5px ${props=>rgba(props.color,0.8)};
     z-index: 3;
 `;
 
@@ -43,9 +55,12 @@ const ShapeReflect = styled.div<{position:number,size:number}>`
 
 
 const SongDisplay = () =>{
+    const pauseStatus = useSelector((state:StateType)=>state.isPaused);
+    const currentMusic = useSelector((state:StateType)=>state.currentMusic);
+    const uiColor = useSelector((state:StateType)=>state.uiColor);
     return(
         <SongDisplayWrapper>
-            <TitleSign size={15}>title</TitleSign>
+            <TitleSign size={15} color={uiColor} on={!pauseStatus}>{`${currentMusic?.title ?? ""} : ${currentMusic?.artist ?? ""}`}</TitleSign>
             <ShapeReflect position={25} size={10}></ShapeReflect>
             <ShapeReflect position={40} size={20}></ShapeReflect>
             <ShapeReflect position={70} size={40}></ShapeReflect>

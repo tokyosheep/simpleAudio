@@ -17,7 +17,7 @@ const ButtonWrapper = styled.div`
     align-items:center;
 `;
 
-const ControlorCompo = ({}) =>{
+const ControlorCompo = () =>{
     const currentMusic = useSelector((state:StateType)=>state.currentMusic);
     const [isPlayMusic, currentTime , playMusic , stopMusic , setMusic , setCurrentTime ] = useAudio();
     useMemo(()=>setMusic(currentMusic?.path ?? ""),[currentMusic]);
