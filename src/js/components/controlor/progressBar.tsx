@@ -53,7 +53,6 @@ const TimeWrapper = styled.div`
 
 export const MusicLength:(props:{currentTime:number,setCurrentTime:(time:number)=>void})=>JSX.Element = ({currentTime,setCurrentTime}) =>{ 
     const uiColor = useSelector((state:StateType)=>state.uiColor);
-    const audioObj = useSelector((state:StateType)=>state.audioObject);
     const currentMusic = useSelector((state:StateType)=>state.currentMusic);
     console.log(currentTime);
     return(
@@ -67,4 +66,4 @@ export const MusicLength:(props:{currentTime:number,setCurrentTime:(time:number)
     )
 }
 
-export default React.memo(MusicLength);
+export default MusicLength;

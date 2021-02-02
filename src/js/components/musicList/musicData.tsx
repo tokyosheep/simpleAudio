@@ -2,6 +2,7 @@ import * as React from "react";
 import {useCallback} from "react";
 import {useSelector,useDispatch} from "react-redux";
 import styled from "styled-components";
+import { paused_set } from "../../redux/actions/dispatchAudio";
 import { currentMusic_set , album_setIndex } from "../../redux/actions/dispatchMusics";
 import { playList_setMusicIndex } from "../../redux/actions/dispatchPlayList";
 
@@ -24,6 +25,7 @@ const MusicData:(props:{title:string,artist:string,index:number,duration:number,
     const currentMusicData = useSelector((state:StateType)=>state.currentMusic);
     const albums = useSelector((state:StateType)=>state.albumList);
     const clickOnList = useCallback(()=>{
+        dispatch(paused_set(true));
         dispatch(currentMusic_set(albums[props.albumIndex].musics[props.index]));
         dispatch(album_setIndex(props.albumIndex,props.index))
     },[currentMusicData]);
@@ -43,6 +45,7 @@ export const PlayListData:(props:{title:string,artist:string,index:number,durati
     const playlist = useSelector((state:StateType)=>state.playList);
     const currentList = playlist.find(p=> p.selected);
     const clickOnList = useCallback(()=>{
+        dispatch(paused_set(true));
         dispatch(playList_setMusicIndex(props.index));
         dispatch(currentMusic_set(currentList?.musics[props.index] ?? null ));
     },[playlist]);

@@ -4,6 +4,7 @@ import { useCallback , useState } from "react";
 import {useSelector,useDispatch} from "react-redux";
 import StateType from "../../redux/StateType";
 import { windowMode_set } from "../../redux/actions/dispatchWIndow";
+import { paused_set } from "../../redux/actions/dispatchAudio";
 import { album_add , currentMusic_set } from "../../redux/actions/dispatchMusics";
 import { getAlbumAndMusics } from "../../fileSystem/handleMusicFiles";
 import { rgba } from "polished";
@@ -50,10 +51,11 @@ const MusicMenu = () =>{
     },[albums]);
     const handlePlayListSet = useCallback(()=>{
         dispatch(windowMode_set(true,"setPlayList"));
-        dispatch(currentMusic_set(null));
+        dispatch(paused_set(true));
     },[modeWindow]);
     const handlePlayMenu = useCallback(()=>{
-        dispatch(windowMode_set(!modeWindow.playlist,"playlist"))
+        dispatch(windowMode_set(!modeWindow.playlist,"playlist"));
+        dispatch(paused_set(true));
         if(modeWindow.playlist){
             const selectedListMusic = playList.find(p=> p.selected === true);
             console.log(selectedListMusic);
