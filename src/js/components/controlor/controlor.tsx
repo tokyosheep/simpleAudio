@@ -22,7 +22,6 @@ const ControlorCompo = () =>{
     const [isPlayMusic, currentTime , playMusic , stopMusic , setMusic , setCurrentTime ] = useAudio();
     useMemo(()=>{
         setMusic(currentMusic?.path ?? "");
-        stopMusic();
     },[currentMusic]);
     return(
         <ConrolWrapper>

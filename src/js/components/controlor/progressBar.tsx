@@ -55,6 +55,7 @@ export const MusicLength:(props:{currentTime:number,setCurrentTime:(time:number)
     const uiColor = useSelector((state:StateType)=>state.uiColor);
     const audioObj = useSelector((state:StateType)=>state.audioObject);
     const currentMusic = useSelector((state:StateType)=>state.currentMusic);
+    console.log(currentTime);
     return(
         <BarWrapper>
             <TimeWrapper>
@@ -66,4 +67,4 @@ export const MusicLength:(props:{currentTime:number,setCurrentTime:(time:number)
     )
 }
 
-export default MusicLength;
+export default React.memo(MusicLength);

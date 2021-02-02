@@ -49,7 +49,9 @@ const SettingCompo = () =>{
     const uiColor = useSelector((state:StateType)=>state.uiColor);
     const windowSize = useSelector((state:StateType)=>state.windowSize);
     const modeWindow = useSelector((state:StateType)=>state.modeWindow);
-    const handleSetWindow = useCallback(()=>dispatch(windowMode_set(false,"setting")),[modeWindow]);
+    const handleSetWindow = useCallback(()=>{
+        dispatch(windowMode_set(false,"setting"));
+    },[modeWindow]);
     return(
         <SettingWrapper windowWidth={(modeWindow.setting ? windowSize[0] : windowSize[0]+300)}>
             <OffIcon color={uiColor} onClick={handleSetWindow}></OffIcon>

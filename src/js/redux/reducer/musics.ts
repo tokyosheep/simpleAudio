@@ -89,6 +89,7 @@ type CurrentMusicReducer = (state:CurrentMusicType,action:CurrentMusicAction)=>C
 export const currentMusic:CurrentMusicReducer = (state=initCurrentMusic,action)=>{
     switch(action.type){
         case "currentMusic_set":
+            console.log(action.music);
             return action.music;
 
         default:

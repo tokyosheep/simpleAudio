@@ -18,12 +18,9 @@ const useAudioContext:(render:(spectrumArray:Uint8Array,canvas:HTMLCanvasElement
             if(analyzerNode !== null){
                 analyzerNode.disconnect();
             }
-            console.log(audioSourceNode);
             intervalId !== null ? clearInterval(intervalId) : null;
         }
         const startTimer = () =>{
-            console.log("start");
-            console.log(audio.src);
             try{
                 if(audio.src !== undefined && audio.src !== null && audio.src !== ""){
                     if(analyzerNode === null){
@@ -37,7 +34,6 @@ const useAudioContext:(render:(spectrumArray:Uint8Array,canvas:HTMLCanvasElement
                         analyzerNode.connect(audioContext.destination);
                     }
                     const Id = setInterval(event=>{
-                        console.log(spectrumArray);
                         if(analyzerNode!==null)analyzerNode.getByteFrequencyData(spectrumArray);
                         render(spectrumArray,canvas);
                     },1/60);

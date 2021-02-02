@@ -76,7 +76,6 @@ const OptionBars = () =>{
     const handleOptionsButton = useCallback((key:string,value:string)=>{
         dispatch(playOptions_set(key,(value === "false" ? true : false)));
     },[options]);
-    console.log(options);
     const icons = Object.entries(options).map(([key,value])=>{
         return(
             <ButtonWrapper key={key}>

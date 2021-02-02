@@ -10,8 +10,6 @@ import { ItemType } from "../playListMain";
 import { useDrag } from 'react-dnd';
 import { darken } from "polished";
 
-import { isCurrentMusic } from "../../../musicList/musicData";
-
 const AlbumTitle = styled.tr<{color:string}>`
     background: ${props =>`linear-gradient(45deg ,${darken(0.4,props.color)},rgb(0,0,0))`};
     td{
@@ -50,13 +48,11 @@ const AlbumList:(props:{album:Albumtype,albumIndex:number})=>JSX.Element = ({alb
                 isDragging: monitor.isDragging(),
             }),
         });
-        console.log(prop);
         /*albums[props.albumIndex].musics[props.index],currentMusicData) */
-        console.log(albumList[albumIndex].musics[i]);
-        const clickOnList = useCallback(()=>dispatch(currentMusic_set(albumList[albumIndex].musics[i])),[currentMusic]);
-        
+        //const clickOnList = useCallback(()=>dispatch(currentMusic_set(albumList[albumIndex].musics[i])),[currentMusic]);
+        const clickOnList = useCallback(()=>dispatch(album_setIndex(albumIndex,i)),[albumList]);
         return(
-            <MusicWrapper key={i} ref={drag} isOver={isCurrentMusic(albumList[albumIndex].musics[i],currentMusic)} onClick={clickOnList} >
+            <MusicWrapper key={i} ref={drag} isOver={m.selected} onClick={clickOnList} >
                 <td>{m.title}</td>
                 <td>{m.artist}</td>
             </MusicWrapper>

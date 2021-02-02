@@ -56,8 +56,8 @@ const VideoPlayer = ({visible}:{visible:boolean}) =>{
         };
     },[videoPath]);
     useMemo(()=>{
-        if(player !== null)player.src(videoPath)}
-    ,[videoPath]);
+        if(player !== null)player.src(videoPath)
+    },[videoPath]);
     return(
         <VideoWrapper visible={visible}>
             <video ref={playerRef} ></video>

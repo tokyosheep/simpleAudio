@@ -27,6 +27,15 @@ const getBackMusic:(albumList:Albumtype[],currentMusic:CurrentMusicType)=>MusicT
     return currentAlbum.musics[currentMusic.index-1];
 }
 
+export const headNextMusicIndex:(albumList:Albumtype[],currentMusic:CurrentMusicType)=>[number,number] = (albumList,currentMusic)=>{
+    const currentAlbumIndex = albumList.findIndex(album=> album.path === path.dirname(currentMusic?.path ?? ""));
+    console.log(path.dirname(currentMusic?.path ?? ""));
+    const currentAlbum = albumList[currentAlbumIndex];
+    if(currentMusic === null||currentAlbum === undefined)return [0,0];
+    if(currentMusic.index+1 > currentAlbum.musics.length)return currentAlbumIndex+1 > albumList.length ? [0,0] : [currentAlbumIndex+1,0];
+    return [currentAlbumIndex,currentMusic.index+1];
+}
+
 export const headNextPlayList:(playList:PlayListType[])=>[MusicType,number]|null = playList =>{
     const list = playList.find(p=> p.selected === true );
     if(list === undefined)return null;

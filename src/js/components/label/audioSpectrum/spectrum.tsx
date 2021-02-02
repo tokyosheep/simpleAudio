@@ -13,11 +13,9 @@ const SpectrumS = styled.canvas`
 `;
 
 const render:(spectrum:Uint8Array,canvas:HTMLCanvasElement|null)=>void = (spectrum,canvas) =>{
-    console.log(canvas);
     if(canvas === null) return;
     const barWidth = Math.round(canvas.width/spectrum.length)*3;
     const canvasContext = canvas.getContext("2d");
-    console.log(canvasContext);
     if(canvasContext === null)return;
     const gradient = canvasContext.createLinearGradient(0,0,0,canvas.height);
     gradient.addColorStop(1.0,"rgb(0,100,255)");

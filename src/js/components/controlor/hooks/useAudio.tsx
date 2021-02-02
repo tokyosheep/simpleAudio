@@ -5,8 +5,8 @@ import {useState,useEffect} from "react";
 
 import { playList_setMusicIndex } from "../../../redux/actions/dispatchPlayList";
 import { audioStatus_set , paused_set } from "../../../redux/actions/dispatchAudio";
-import { currentMusic_set } from "../../../redux/actions/dispatchMusics";
-import { headToNextMusic , headNextPlayList } from "../../../redux/actions/moveNextMusic";
+import { currentMusic_set , album_setIndex } from "../../../redux/actions/dispatchMusics";
+import { headToNextMusic , headNextPlayList , headNextMusicIndex } from "../../../redux/actions/moveNextMusic";
 
 const randomNum:(length:number)=>number = length =>{
     return Math.floor(Math.random()*length);
@@ -37,7 +37,9 @@ const useAudio:()=>[boolean,number,()=>void,()=>void,(url:string)=>void,(time:nu
             dispatch(playList_setMusicIndex(playData[1]));
             dispatch(currentMusic_set(playData[0]));
         }else{
-            dispatch(headToNextMusic(albumList,currentMusic));
+            const indexes = headNextMusicIndex(albumList,currentMusic);
+            dispatch(album_setIndex(indexes[0],indexes[1]));
+            dispatch(currentMusic_set(albumList[indexes[0]].musics[indexes[1]]));
         }
     }
     const shuffleMusic = () =>{
@@ -47,16 +49,19 @@ const useAudio:()=>[boolean,number,()=>void,()=>void,(url:string)=>void,(time:nu
             dispatch(playList_setMusicIndex(shuffledNumber));
             dispatch(currentMusic_set(currentList?.musics[shuffledNumber] ?? currentMusic));
         }else{
-            const randomAlbum = albumList[randomNum(albumList.length)]
-            dispatch(currentMusic_set(randomAlbum.musics[randomNum(randomAlbum.musics.length)]));
+            const randomAlbum = randomNum(albumList.length);
+            const randomMusic = randomNum(albumList[randomAlbum].musics.length);
+            dispatch(album_setIndex(randomAlbum,randomMusic));
+            dispatch(currentMusic_set(albumList[randomAlbum].musics[randomMusic]));
         }
     }
     const switchMusic = () =>{
+        console.log("end");
         if(options.repeat)audio.currentTime=0;
         if(options.succession)nextMusic();
         if(options.shuffle)shuffleMusic();
-        if(options.noOption !== true){
-            play()();//noOptionがオフだったら続けて再生
+        if(options.noOption === false){
+            play()()
         }else{
             pause()();
         }
@@ -67,29 +72,15 @@ const useAudio:()=>[boolean,number,()=>void,()=>void,(url:string)=>void,(time:nu
         audio.addEventListener("pause", forceUpdate);
         audio.addEventListener("ended",switchMusic);
         audio.addEventListener("timeupdate", ()=>{
-            audio.removeEventListener("ended", forceUpdate);
+            audio.removeEventListener("ended",forceUpdate);
             audio.addEventListener("ended",switchMusic);//endedイベントの関数は常に更新し続けないとredux変数も更新されない
             forceUpdate();
         });
-    },[options,albumList,currentMusic,pauseStatus]);
+    },[options,albumList,currentMusic]);
 
-    const setMusic:(url:string)=>void = url => {
-        const newAudio = new Audio();
-        try{
-            newAudio.src = url;//html input fileの場合、ファイルタイプの変換が必要だがlocalのパスを取得できる環境下では不要　
-        }catch(e){
-            alert(e);
-        }finally{
-            newAudio.currentTime = 0;
-        }
-        setAudio(newAudio);
-        dispatch(audioStatus_set(newAudio));
-        dispatch(paused_set(newAudio.paused));
-    };
     const playMusic = () =>{
-        if(currentMusic === null)return;
         if(audio.paused){
-            audio.src = currentMusic.path;
+            //audio.src = currentMusic?.path ?? "";
             play()();
         }else{
             pause()();
@@ -105,6 +96,20 @@ const useAudio:()=>[boolean,number,()=>void,()=>void,(url:string)=>void,(time:nu
         dispatch(audioStatus_set(newAudio));
         dispatch(paused_set(audio.paused));
     }
+
+    const setMusic:(url:string)=>void = url => {
+        const newAudio = new Audio();
+        try{
+            newAudio.src = url;//html input fileの場合、ファイルタイプの変換が必要だがlocalのパスを取得できる環境下では不要　
+        }catch(e){
+            alert(e);
+        }finally{
+            newAudio.currentTime = 0;
+        }
+        setAudio(newAudio);
+        dispatch(audioStatus_set(newAudio));
+        dispatch(paused_set(newAudio.paused));
+    };
     const setCurrentTime:(time:number)=>void = time => audio.currentTime = time;
     audio.volume = volume;
     return [!audio.paused, audio.currentTime,playMusic,stopMusic,setMusic,setCurrentTime];
