@@ -37,6 +37,7 @@ const useAudio:()=>[boolean,number,()=>void,()=>void,(url:string)=>void,(time:nu
             dispatch(currentMusic_set(playData[0]));
         }else{
             const indexes = headNextMusicIndex(albumList,currentMusic);
+            console.log(indexes);
             dispatch(album_setIndex(indexes[0],indexes[1]));
             dispatch(currentMusic_set(albumList[indexes[0]].musics[indexes[1]]));
         }

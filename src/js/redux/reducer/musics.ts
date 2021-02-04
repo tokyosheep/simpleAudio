@@ -62,7 +62,12 @@ export const albumList:AlbumReducer = (state=initAlbums,action) =>{
             return albums;
 
         case "album_remove":
-            const removed = state.filter((a,i)=> i===action.index);
+            const removed = state.filter((a,i)=> i !== action.index);
+            if(removed.length > 0 && !removed.some(a=> a.selected === true)){
+                removed[0].selected = true;
+                removed[0].musics[0].selected = true;
+            }
+            console.log(removed);
             return removed;
 
         case "album_setIndex":

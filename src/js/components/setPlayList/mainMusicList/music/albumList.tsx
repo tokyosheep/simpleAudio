@@ -27,37 +27,34 @@ const MusicWrapper = styled.tr<{isOver:boolean}>`
     cursor: pointer;
 `;
 
-
+const DragRow:(props:{m:MusicType,i:number,albumIndex:number})=>JSX.Element = ({m,i,albumIndex}) =>{
+    const dispatch = useDispatch();
+    const [prop, drag] = useDrag({
+        item: { music:m, type: ItemType.MUSIC },
+        end:(item,monitor)=>{
+            console.log(item);
+            console.log(monitor);
+            console.log(m);
+            const dropResult = monitor.getDropResult();
+            console.log(dropResult);
+        },
+        collect: (monitor) => ({
+            isDragging: monitor.isDragging(),
+        }),
+    });
+    const clickOnList:(i:number)=>void = i =>dispatch(album_setIndex(albumIndex,i));
+    return(
+        <MusicWrapper ref={drag} isOver={m.selected} onClick={()=>clickOnList(i)} >
+            <td>{m.title}</td>
+            <td>{m.artist}</td>
+        </MusicWrapper>
+    );
+    
+}
 
 const AlbumList:(props:{album:Albumtype,albumIndex:number})=>JSX.Element = ({album,albumIndex}) =>{
-    const dispatch = useDispatch();
     const uiColor = useSelector((state:StateType)=>state.uiColor);
-    const albumList = useSelector((state:StateType)=>state.albumList);
-    const currentMusic = useSelector((state:StateType)=>state.currentMusic);
-    const musics = album.musics.map((m,i)=>{
-        const [prop, drag] = useDrag({
-            item: { music:m, type: ItemType.MUSIC },
-            end:(item,monitor)=>{
-                console.log(item);
-                console.log(monitor);
-                console.log(m);
-                const dropResult = monitor.getDropResult();
-                console.log(dropResult);
-            },
-            collect: (monitor) => ({
-                isDragging: monitor.isDragging(),
-            }),
-        });
-        /*albums[props.albumIndex].musics[props.index],currentMusicData) */
-        //const clickOnList = useCallback(()=>dispatch(currentMusic_set(albumList[albumIndex].musics[i])),[currentMusic]);
-        const clickOnList = useCallback(()=>dispatch(album_setIndex(albumIndex,i)),[albumList]);
-        return(
-            <MusicWrapper key={i} ref={drag} isOver={m.selected} onClick={clickOnList} >
-                <td>{m.title}</td>
-                <td>{m.artist}</td>
-            </MusicWrapper>
-        );
-    })
+    const musics = album.musics.map((m,i)=><DragRow key={i} i={i} m={m} albumIndex={albumIndex} />);
     return(
         <tbody>
             <AlbumTitle color={uiColor}>

@@ -119,8 +119,8 @@ app.on("ready", function () {
       contextIsolation: false
     }
   });
-  mainWindow.loadURL("file://".concat(__dirname, "/index.html"));
-  if (debug) mainWindow.webContents.openDevTools();
+  mainWindow.loadURL("file://".concat(__dirname, "/index.html")); //if(debug)mainWindow.webContents.openDevTools();
+
   mainWindow.on("closed", function () {
     mainWindow = null;
   });
@@ -177,8 +177,8 @@ var initIpcEvent = function initIpcEvent() {
     });
     return video;
   });
-  electron__WEBPACK_IMPORTED_MODULE_0__.ipcMain.on("getAppPath", function (event) {
-    event.returnValue = app.getAppPath();
+  electron__WEBPACK_IMPORTED_MODULE_0__.ipcMain.handle("getAppPath", function (event) {
+    return app.getAppPath();
   });
 };
 

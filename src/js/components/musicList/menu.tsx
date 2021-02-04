@@ -44,9 +44,16 @@ const MusicMenu = () =>{
     console.log(albums);
     const handleMusicsButton = useCallback(()=>{
         (async()=>{
-            const album = await getAlbumAndMusics();
-            if(!album)return;
-            dispatch(album_add([album]));
+            try{
+                dispatch(windowMode_set(true,"loading"));
+                const album = await getAlbumAndMusics();
+                if(!album)return;
+                dispatch(album_add([album]));
+            }catch(e){
+                alert(e);
+            }finally{
+                dispatch(windowMode_set(false,"loading"));
+            }
         })();
     },[albums]);
     const handlePlayListSet = useCallback(()=>{

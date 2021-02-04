@@ -18,14 +18,16 @@ export type ModeWindow = {
     setting:boolean,
     playlist:boolean,
     setPlayList:boolean,
-    fillPlayListName:boolean
+    fillPlayListName:boolean,
+    loading:boolean
 }
 
 const initModeWindow:ModeWindow = {
     setting:false,
     playlist:false,
     setPlayList:false,
-    fillPlayListName:false
+    fillPlayListName:false,
+    loading:false
 }
 
 export type ModeAction = {type:"modeWin_set",on:boolean,prop:string};

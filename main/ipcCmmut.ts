@@ -28,7 +28,7 @@ export const initIpcEvent = () =>{
         });
         return video;
     })
-    ipcMain.on("getAppPath",event=>{
-        event.returnValue = app.getAppPath();
+    ipcMain.handle("getAppPath",event=>{
+        return app.getAppPath();
     });
 }

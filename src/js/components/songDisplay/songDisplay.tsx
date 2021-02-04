@@ -30,6 +30,7 @@ const TitleSign = styled(DigiFont)<{size:number,on:boolean,color:string}>`
     color: ${props=> props.color};
     text-shadow:0px 0px 5px ${props=>rgba(props.color,0.8)};
     z-index: 3;
+    transition: .3s linear;
 `;
 
 const Reflect = styled.div`
@@ -60,7 +61,7 @@ const SongDisplay = () =>{
     const uiColor = useSelector((state:StateType)=>state.uiColor);
     return(
         <SongDisplayWrapper>
-            <TitleSign size={15} color={uiColor} on={!pauseStatus}>{`${currentMusic?.title ?? ""} : ${currentMusic?.artist ?? ""}`}</TitleSign>
+            <TitleSign size={15} color={uiColor} on={!pauseStatus}>{`${currentMusic?.title ?? "no title"} : ${currentMusic?.artist ?? "unknown"}`}</TitleSign>
             <ShapeReflect position={25} size={10}></ShapeReflect>
             <ShapeReflect position={40} size={20}></ShapeReflect>
             <ShapeReflect position={70} size={40}></ShapeReflect>

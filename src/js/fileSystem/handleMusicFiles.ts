@@ -2,10 +2,10 @@
 import {ipcRenderer} from "electron";
 import * as fs from "fs";
 import * as path from "path";
-import NodeID3 from "node-id3";
-import { MusicType , Albumtype , MusicData , AlubumData } from "../redux/reducer/musics";
+import * as mm from "music-metadata";
+import { MusicType , Albumtype , MusicData , AlubumData , PlayListType, playList } from "../redux/reducer/musics";
 
-const musicExts = [".mp3"];
+const musicExts = [".mp3",".m4a",".wave"];
 const imageExts = [".jpg",".jpeg",".png"];
 
 const getmusicFiles:(folder:string)=>Promise<{folder:string,files:string[]}> = async folder =>{
@@ -21,48 +21,30 @@ export const getMusics:()=>Promise<false|{folder:string,files:string[]}> = async
     return getmusicFiles(folder.filePaths[0]);
 }
 
-export const getMusicData:(file:string,index:number)=>Promise<MusicType> = (file,index) =>{
+const getMusicData:(file:string,index:number)=>Promise<MusicType> = (file,index) =>{
     return new Promise(resolve=>{
-        const f = NodeID3.read(file);
-        console.log(f);
         const audio = new Audio();
         audio.src = file;
         audio.load();
-        audio.addEventListener('loadedmetadata',e=>{
-            console.log(audio);
-            console.log(audio.duration);//曲の長さ
+        audio.addEventListener("loadedmetadata",async e=>{
+            const musicData = await mm.parseFile(file);
             const musicObj = new MusicData(
-                f.album ?? "",
-                f.artist ?? "",
-                f.title ?? "",
-                f.trackNumber ?? "",
-                f.year ?? "",
+                musicData.common?.album ?? "",
+                musicData.common?.artist ?? "",
+                musicData.common?.title ?? path.basename(file,path.extname(file)),
+                index.toString(),
+                musicData.common?.year?.toString() ?? "",
                 Math.floor(audio.duration),
                 file,
                 path.basename(file),
                 index,
-                turnedBuffer(f.image)
-            )
+                musicData.common?.picture?.[0].data ?? null
+            );
             resolve(musicObj);
         });
-    });
-}
+    })
+};
 
-type imageType = string | {
-    mime: string;
-    type: {
-        id: number;
-        name: string;
-    };
-    description: string;
-    imageBuffer: Buffer;
-} | undefined
-
-const turnedBuffer:(obj:imageType|null)=>null|string|Buffer = obj =>{
-    if(typeof obj === "string")return obj;
-    if(obj === null || obj === undefined || obj.imageBuffer === undefined)return null;
-    return obj.imageBuffer;
-}
 
 const isFolder:(folder:string)=>Promise<false|{folder:string,files:string[]}> = async folder =>{
     const state = await fs.promises.stat(folder);
@@ -83,4 +65,41 @@ export const getAlbumAndMusics:(folder?:string)=>Promise<Albumtype|false> = asyn
     }));
     const musicData = promises.filter(m=> m.status === "fulfilled").map((r:any) => r.value);
     return new AlubumData(musicData,musics.folder,path.basename(musics.folder));
+}
+
+/* データベースのデータを読み込み直す */
+
+export const tuenSavedAlbums:(albums:Albumtype[])=>Promise<Albumtype[]> = async albums =>{
+    const promises = await Promise.allSettled(albums.map(async(album,index)=>{
+        album.musics = await getSavedMusics(album.musics);
+        return album;
+    }));
+    const albumList = promises.filter(m=> m.status === "fulfilled").map((r:any) => r.value);
+    return albumList;
+}
+
+export const turnSavedList:(list:PlayListType[])=>Promise<PlayListType[]> = async lists =>{
+    const promises = await Promise.allSettled(lists.map(async(list,index)=>{
+        const musics = await getSavedMusics(list.musics);
+        list.musics = musics;
+        return list;
+    }));
+    const playLists = promises.filter(m=> m.status === "fulfilled").map((r:any) => r.value);
+    return playLists;
+}
+
+
+/* 音楽データ読みこみ */
+const getSavedMusics:(musics:MusicType[])=>Promise<MusicType[]> = async musics =>{
+        const promises = await Promise.allSettled(musics.map(async(music,index)=>{
+            try{
+                const musicObj = await getMusicData(music.path,index);
+                return musicObj;
+            }catch(e){
+                alert(e);
+                return null;
+            }
+        }));
+        const musicData = promises.filter(m=> m.status === "fulfilled").map((r:any) => r.value);
+        return musicData;
 }

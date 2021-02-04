@@ -1,5 +1,3 @@
-import { AudioObject , AudioType } from "../../audio/audioObj";
-
 const initAudio = new Audio();
 export type AudioAction = {type:"audio_set",audio:HTMLAudioElement};
 type AudioReducer = (state:HTMLAudioElement,action:AudioAction)=>HTMLAudioElement;

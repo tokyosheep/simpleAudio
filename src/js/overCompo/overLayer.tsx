@@ -2,7 +2,8 @@ import * as React from "react";
 import styled from "styled-components";
 import {useSelector,useDispatch} from "react-redux";
 import StateType from "../redux/StateType";
-import FillPlayListaName from "./fillPlayListName";
+import FillPlayListName from "./fillPlayListName";
+import Loading from "./loading";
 
 const OverWrapper = styled.div<{on:boolean}>`
     width: 100%;
@@ -16,10 +17,28 @@ const OverWrapper = styled.div<{on:boolean}>`
 `;
 
 const OverLayer = () =>{
-    const fillPlayListName = useSelector((state:StateType)=>state.modeWindow.fillPlayListName);
+    const modeWIndow = useSelector((state:StateType)=>state.modeWindow);
+    const fillPlayListName = modeWIndow.fillPlayListName;
+    const loadingOver = modeWIndow.loading;
+    const isOverWindow = fillPlayListName || loadingOver;
+    const whichWindow = () => {
+        const mode = Object.entries(modeWIndow).find(([key,value])=> value===true) ?? "";
+        console.log(mode);
+        const type = mode[0] ?? "";
+        switch(type){
+            case "fillPlayListName":
+                return <FillPlayListName />;
+
+            case "loading":
+                return <Loading />;
+
+            default:
+                return <FillPlayListName />;
+        }
+    }
     return(
-        <OverWrapper on={fillPlayListName}>
-            <FillPlayListaName />
+        <OverWrapper on={isOverWindow}>
+            {whichWindow()}
         </OverWrapper>
     )   
 }

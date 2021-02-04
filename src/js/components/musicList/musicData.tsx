@@ -7,6 +7,7 @@ import { currentMusic_set , album_setIndex } from "../../redux/actions/dispatchM
 import { playList_setMusicIndex } from "../../redux/actions/dispatchPlayList";
 
 import StateType from "../../redux/StateType";
+import { setMinuteTime } from "../../fileSystem/timeConvert";
 
 const MusicWrapper = styled.tr<{on:boolean}>`
     width: 100%;
@@ -33,7 +34,7 @@ const MusicData:(props:{title:string,artist:string,index:number,duration:number,
         <MusicWrapper on={albums[props.albumIndex].musics[props.index].selected} onClick={clickOnList}>
             <th>{props.title}</th>
             <th>{props.artist}</th>
-            <th>{props.duration}</th>
+            <th>{setMinuteTime(props.duration)}</th>
         </MusicWrapper>
     )
 }
@@ -53,7 +54,7 @@ export const PlayListData:(props:{title:string,artist:string,index:number,durati
         <MusicWrapper on={currentList?.currentMusicIndex === props.index ?? false} onClick={clickOnList}>
             <th>{props.title}</th>
             <th>{props.artist}</th>
-            <th>{props.duration}</th>
+            <th>{setMinuteTime(props.duration)}</th>
         </MusicWrapper>
     )
 }

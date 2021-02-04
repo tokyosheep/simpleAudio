@@ -66,7 +66,7 @@ const Button = styled.button<{color:string}>`
 `;
 
 
-const FillPlayListaName = () =>{
+const FillPlayListName = () =>{
     const fillPlayListName = useSelector((state:StateType)=>state.modeWindow.fillPlayListName);
     const dispatch = useDispatch();
     const uiColor = useSelector((state:StateType)=>state.uiColor);
@@ -88,4 +88,4 @@ const FillPlayListaName = () =>{
     )
 }
 
-export default FillPlayListaName;
+export default FillPlayListName;

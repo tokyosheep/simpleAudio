@@ -14,7 +14,7 @@ export const background:BackgroundReducer = (state=initBackGround,action)=>{
     }
 }
 
-const initVideo = "./video/mov_hts-samp001.mp4";
+const initVideo = "";
 export type VideoAction = {type:"video_set",video:string};
 type VideoReducer = (state:string,action:VideoAction)=>string;
 

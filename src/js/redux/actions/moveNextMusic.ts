@@ -32,7 +32,7 @@ export const headNextMusicIndex:(albumList:Albumtype[],currentMusic:CurrentMusic
     console.log(path.dirname(currentMusic?.path ?? ""));
     const currentAlbum = albumList[currentAlbumIndex];
     if(currentMusic === null||currentAlbum === undefined)return [0,0];
-    if(currentMusic.index+1 > currentAlbum.musics.length)return currentAlbumIndex+1 > albumList.length ? [0,0] : [currentAlbumIndex+1,0];
+    if(currentMusic.index+1 >= currentAlbum.musics.length)return currentAlbumIndex+1 > albumList.length ? [0,0] : [currentAlbumIndex+1,0];
     return [currentAlbumIndex,currentMusic.index+1];
 }
 

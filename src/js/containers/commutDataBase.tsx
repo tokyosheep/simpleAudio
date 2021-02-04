@@ -1,6 +1,6 @@
 import * as React from "react";
-import { useMemo , useState } from "react";
-import { useSelector , useDispatch } from "react-redux";
+import { useMemo } from "react";
+import { useSelector } from "react-redux";
 import StateType from "../redux/StateType";
 import {ipcRenderer} from "electron";
 

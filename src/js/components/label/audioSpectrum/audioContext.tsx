@@ -22,6 +22,7 @@ const useAudioContext:(render:(spectrumArray:Uint8Array,canvas:HTMLCanvasElement
         }
         const startTimer = () =>{
             try{
+                if(audioSourceNode)audioSourceNode.disconnect();
                 if(audio.src !== undefined && audio.src !== null && audio.src !== ""){
                     if(analyzerNode === null){
                         analyzerNode = audioContext.createAnalyser();

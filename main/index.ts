@@ -18,7 +18,7 @@ app.on("ready",()=>{
         }
     });
     mainWindow.loadURL(`file://${__dirname}/index.html`);
-    if(debug)mainWindow.webContents.openDevTools();
+    //if(debug)mainWindow.webContents.openDevTools();
     mainWindow.on("closed",()=>{
         mainWindow = null;
     });

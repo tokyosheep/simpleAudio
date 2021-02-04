@@ -4,6 +4,7 @@ import { useSelector , useDispatch } from "react-redux";
 import { window_set } from "../redux/actions/dispatchWIndow";
 import { album_add } from "../redux/actions/dispatchMusics";
 import { playList_set } from "../redux/actions/dispatchPlayList";
+import { windowMode_set } from "../redux/actions/dispatchWIndow";
 import StateType from "../redux/StateType";
 import { RecordType } from "../../../main/DataBase";
 import electron, { ipcRenderer } from "electron";
@@ -18,6 +19,8 @@ import SongDisplay from "../components/songDisplay/songDisplay";
 import ControlorCompo from "../components/controlor/controlor";
 import ValuemeCompo from "../components/volume/valume";
 import { createGlobalStyle } from "styled-components";
+
+import { turnSavedList , tuenSavedAlbums } from "../fileSystem/handleMusicFiles";
 
 import { containers } from "../styles/containers";
 const { Container } = containers;
@@ -52,13 +55,16 @@ const Layout = () =>{
         dispatch(window_set([window.innerWidth,window.innerHeight]));
         (async()=>{
             try{
+                dispatch(windowMode_set(true,"loading"));
                 const data:RecordType[] = await ipcRenderer.invoke("loadAllData");
                 console.log(data);
-                dispatch(album_add(data[0].albums));
-                dispatch(playList_set(data[0].playList));
+                dispatch(album_add(await tuenSavedAlbums(data[0].albums)));
+                dispatch((playList_set(await turnSavedList(data[0].playList))));
                 console.log(data);
             }catch(e){
                 console.log(e)
+            }finally{
+                dispatch(windowMode_set(false,"loading"));
             }
         })();
     },[]);

@@ -36,6 +36,8 @@ const SpectrumSquare = () =>{
     const isPaused = useSelector((state:StateType)=>state.isPaused);
     const canvas = useRef(null);
     const [stopTimer,startTimer] = useAudioContext(render,canvas.current);
+    startTimer();
+    /*
     useMemo(()=>{
         if(canvas !== null && !isPaused )startTimer();
         if(canvas !== null && isPaused){
@@ -43,6 +45,7 @@ const SpectrumSquare = () =>{
             clearRender(canvas.current);
         }
     },[isPaused]);
+    */
     return(
         <SpectrumS ref={canvas} width={200} height={60}></SpectrumS>
     )
