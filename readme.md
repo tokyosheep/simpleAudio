@@ -43,4 +43,4 @@
 
 <img src="readmeImg/setting.gif">
 
-<p>use font from <a href="https://www.keshikan.net/fonts.html">here</a></p>
+<p>use font for some texts from <a href="https://www.keshikan.net/fonts.html">here</a></p>
