@@ -21,24 +21,9 @@ const OverLayer = () =>{
     const fillPlayListName = modeWIndow.fillPlayListName;
     const loadingOver = modeWIndow.loading;
     const isOverWindow = fillPlayListName || loadingOver;
-    const whichWindow = () => {
-        const mode = Object.entries(modeWIndow).find(([key,value])=> value===true) ?? "";
-        console.log(mode);
-        const type = mode[0] ?? "";
-        switch(type){
-            case "fillPlayListName":
-                return <FillPlayListName />;
-
-            case "loading":
-                return <Loading />;
-
-            default:
-                return <FillPlayListName />;
-        }
-    }
     return(
         <OverWrapper on={isOverWindow}>
-            {whichWindow()}
+            {(fillPlayListName ? <FillPlayListName /> : <Loading />)}
         </OverWrapper>
     )   
 }

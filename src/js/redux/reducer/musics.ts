@@ -159,7 +159,7 @@ export const playList:PlayListReducer = (state=initPlayList,action)=>{
             return list;
 
         case "playList_add":
-            return [...state,new PlayListClass(action.name,state.length+1,[])];
+            return [...state,new PlayListClass(action.name,state.length,[])];
 
         case "playList_remove":
             const unSelected = state.filter((p,i)=> p.selected === false);
@@ -201,6 +201,9 @@ export const playList:PlayListReducer = (state=initPlayList,action)=>{
                 if(index===action.replace)return [...acc,current,switchMusic];
                 return [...acc,current];
             },[]).filter(v => v !== null);
+            console.log(state);
+            console.log(after);
+            console.log(current.index);
             state[current.index].musics = after;
             return [...state];
 

@@ -73,8 +73,8 @@ const OptionBars = () =>{
     const dispatch = useDispatch();
     const options = useSelector((state:StateType)=>state.playOptions);
     const uiColor = useSelector((state:StateType)=>state.uiColor);
-    const handleOptionsButton = useCallback((key:string,value:string)=>{
-        dispatch(playOptions_set(key,(value === "false" ? true : false)));
+    const handleOptionsButton = useCallback((key:string)=>{
+        dispatch(playOptions_set(key,true));
     },[options]);
     const icons = Object.entries(options).map(([key,value])=>{
         return(
