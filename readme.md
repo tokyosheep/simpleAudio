@@ -2,7 +2,7 @@
 
 <h2>I developed audio player on Electron</h2>
 
-<img src="img/mainUI.png">
+<img src="readmeImg/mainUI.png">
 
 <p>
     this is a simple audio player based on Electron.
@@ -23,7 +23,7 @@
     even you could drag album folder and drop on music list form.
 </p>
 
-<img src="img/playList.png">
+<img src="readmeImg/playList.png">
 
 <h3>play list</h3>
 
@@ -32,7 +32,7 @@
     just drag from music list to play list form
 </p>
 
-<img src="img/setPlaylist.gif">
+<img src="readmeImg/setPlaylist.gif">
 
 <h3>set UI and image</h3>
 
@@ -41,6 +41,6 @@
     and you could set effect blur effect and contrast.
 </p>
 
-<img src="img/setting.gif">
+<img src="readmeImg/setting.gif">
 
 <a href src="https://kawano-shuji.com/justdiary/?p=1373&preview=true">Japanese explanation is here</a>
