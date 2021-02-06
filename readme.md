@@ -43,4 +43,4 @@
 
 <img src="readmeImg/setting.gif">
 
-<a href src="https://kawano-shuji.com/justdiary/?p=1373&preview=true">Japanese explanation is here</a>
+<p>use font from <a href="https://www.keshikan.net/fonts.html">here</a></p>
