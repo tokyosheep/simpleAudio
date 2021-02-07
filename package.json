@@ -2,11 +2,43 @@
   "name": "simpleAudio",
   "version": "1.0.0",
   "description": "",
+  "build": {
+    "files": [
+      "./icon",
+      "index.html",
+      "index.js",
+      "./transpiled",
+      "./node_modules",
+      "./image"
+    ],
+    "appId": "clock",
+    "mac": {
+      "icon": "icon/icons/mac/icon.icns",
+      "target": [
+        "dmg"
+      ],
+      "category": "public.app-category.social-networking"
+    },
+    "win": {
+      "icon": "icon/icons/win/icon.ico",
+      "target": "nsis"
+    },
+    "linux": {
+      "icon": "icons",
+      "target": [
+        "deb",
+        "rpm"
+      ],
+      "category": "Network"
+    }
+  },
   "main": "index.js",
   "scripts": {
     "build": "webpack",
     "watch": "webpack -w",
-    "start": "electron index.js"
+    "start": "electron index.js",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder"
   },
   "keywords": [],
   "author": "",
